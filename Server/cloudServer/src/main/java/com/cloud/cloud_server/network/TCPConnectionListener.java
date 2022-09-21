@@ -24,4 +24,5 @@ public interface TCPConnectionListener {
     void onReceivedFileForFolder(ChannelHandlerContext ctx, FilePacket filePacket);
     void onRequestFileForFolder(ChannelHandlerContext ctx, String paths);
     void onSignUpAttempt(ChannelHandlerContext ctx, CommandPacket commandPacket);
+    void onCreateFolder(ChannelHandlerContext ctx, CommandPacket commandPacket);
 }

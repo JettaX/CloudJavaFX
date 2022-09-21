@@ -69,6 +69,9 @@ public class CommonHandler extends SimpleChannelInboundHandler<CommandPacket> {
             log.debug(command);
             String filePath = commandPacket.getBody();
             eventListener.onRequestFileForFolder(ctx, filePath);
+        } else if (command.equals(ServerCommand.CREATE_FOLDER.getCommand())) {
+            log.debug(command);
+            eventListener.onCreateFolder(ctx, commandPacket);
         }
     }
 

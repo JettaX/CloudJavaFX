@@ -10,6 +10,7 @@ public enum ServerCommand implements Serializable {
     AUTHENTICATE_SUCCESS("/auth_success"),
     AUTHENTICATE_ATTEMPT("/attempts_over"),
     TOKEN_UPDATE("/token_update"),
+    CREATE_FOLDER("/create_folder"),
     RECEIVE_FILE("/receive_file"),
     REQUEST_FILE("/request_file"),
     RECEIVE_FOLDER("/receive_folder"),

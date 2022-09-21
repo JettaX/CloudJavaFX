@@ -197,6 +197,11 @@ public class TCPListener implements TCPConnectionListener {
         }
     }
 
+    @Override
+    public void onCreateFolder(ChannelHandlerContext ctx, CommandPacket commandPacket) {
+        FileUtil.createFolder(commandPacket.getBody());
+    }
+
     private void writeToFile(File file, long size, byte[] bytes, boolean isFirst) throws IOException {
         try (FileOutputStream writer = new FileOutputStream(file, !isFirst)) {
             writer.write(bytes);

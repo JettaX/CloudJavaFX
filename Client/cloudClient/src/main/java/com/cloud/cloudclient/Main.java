@@ -13,10 +13,6 @@ import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.PopupControl;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -76,38 +72,7 @@ public class Main extends Application {
         stage.close();
         FXMLLoader loader = createStage("home.fxml");
         homeController = loader.getController();
-        homeController.initializer();
-    }
-
-    public static void showDialog(String description) {
-        PopupControl popup = new PopupControl();
-        popup.setAutoHide(true);
-        popup.setAutoFix(true);
-        popup.setHideOnEscape(true);
-        popup.setConsumeAutoHidingEvents(true);
-
-        VBox commonWrapper = new VBox();
-        commonWrapper.getStylesheets().add(Main.class.getResource("styles/common.css").toExternalForm());
-        commonWrapper.setFillWidth(true);
-        commonWrapper.getStyleClass().add("popup-rename-wrapper");
-        Label descriptionAction = new Label(description);
-        descriptionAction.getStyleClass().add("popup-label");
-        TextField inputName = new TextField();
-        inputName.getStyleClass().addAll("input-color", "popup-rename-input");
-        commonWrapper.getChildren().addAll(descriptionAction, inputName);
-
-        popup.getStyleClass().add("popup-rename");
-        popup.getScene().setRoot(commonWrapper);
-        var width = popup.getWidth() / 2;
-        var height = popup.getHeight() / 2;
-
-        var windowWidth = stage.getWidth() / 2;
-        var windowHeight = stage.getHeight() / 2;
-
-        var x = stage.getX() + windowWidth - width;
-        var y = stage.getY() + windowHeight - height;
-
-        popup.show(stage, x, y);
+        homeController.initializer(stage);
     }
 
     public static void reFillHierarchy() {

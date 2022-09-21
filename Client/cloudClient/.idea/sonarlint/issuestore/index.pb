@@ -47,8 +47,6 @@ k
 ;src/main/java/com/cloud/cloudclient/network/Connection.java,5\9\59aecb642e8a86568d0a1b943ee0e52f508bdcf9
 n
 >src/main/java/com/cloud/cloudclient/network/CommonHandler.java,a\5\a5ac1d3d01e7f99786db31b76eab3a05c3fd5898
-f
-6src/main/java/com/cloud/common/util/ServerCommand.java,4\7\47b763023dda45e3ec7067b287d7d6435472a1e2
 v
 Fsrc/main/java/com/cloud/cloudclient/fxcontrollers/LoginController.java,6\2\62b4f05674a6ffca360ff0d201b6796b5157608a
 d
@@ -57,8 +55,6 @@ k
 ;src/main/java/com/cloud/cloudclient/utils/FilesChecker.java,0\e\0eb0c359e2623a16123955ca7619bad6dc567389
 z
 Jsrc/main/java/com/cloud/cloudclient/fxcontrollers/DownloadsController.java,6\a\6a715227e37294b165d37c62772c30e0b9cfb983
-n
->src/main/java/com/cloud/cloudclient/network/TCPConnection.java,3\7\374a58c53add205deaad4d7436f7b460837ff73a
 l
 <src/main/java/com/cloud/cloudclient/network/TCPListener.java,4\a\4a28a988c8820158ab892fae3921cd2a4b8b04f1
 m

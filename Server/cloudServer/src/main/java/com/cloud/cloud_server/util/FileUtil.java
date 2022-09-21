@@ -28,6 +28,13 @@ public class FileUtil {
         return userPath.getAbsolutePath();
     }
 
+    public static void createFolder(String path) {
+        File file = new File(path);
+        if (!file.exists()) {
+            file.mkdir();
+        }
+    }
+
     public static File saveFile(String fileName, String username) throws IOException {
         File file = new File(getUserPath(username), fileName);
         if (!file.exists()) {

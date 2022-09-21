@@ -38,8 +38,8 @@ public class FileUtil {
         return file;
     }
 
-    public static void createFolder(String path) {
-        File file = new File(path);
+    public static void createFolder(String path, String folderName) {
+        File file = new File(path, folderName);
         if (!file.exists()) {
             file.mkdir();
         }

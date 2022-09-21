@@ -21,6 +21,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -67,9 +68,11 @@ public class HomeController {
     public Button addFiles;
     private CloudFolder currentCloudFolder;
     private boolean isSearch;
+    private Stage stage;
     private HostServices hostServices;
 
-    public void initializer() {
+    public void initializer(Stage stage) {
+        this.stage = stage;
         isSearch = false;
         initAccountButton();
         initGraphics();
@@ -311,6 +314,7 @@ public class HomeController {
                 Connection.get().deleteFile(cloudFile.getPath());
             } else {
                 FileUtil.deleteFile(cloudFile.getPath());
+                onReload();
             }
         });
     }
@@ -480,17 +484,61 @@ public class HomeController {
     }
 
     public void addFilesListener(MouseEvent mouseEvent) {
-        if (!serverSource.isSelected()) {
-            createContextMenuForAddFiles().show(addFiles, mouseEvent.getScreenX(), mouseEvent.getScreenY());
-        }
+        createContextMenuForAddFiles().show(addFiles, mouseEvent.getScreenX(), mouseEvent.getScreenY());
     }
 
     public ContextMenu createContextMenuForAddFiles() {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem addFolder = new MenuItem("add folder");
         graphicsApply(addFolder, "/images/icon/folder-open.png", 20, 20);
-        addFolder.setOnAction(event -> Main.showDialog("enter file name"));
+        addFolder.setOnAction(event -> showDialog("enter file name"));
         contextMenu.getItems().add(addFolder);
         return contextMenu;
+    }
+
+    public void showDialog(String description) {
+        PopupControl popup = new PopupControl();
+        popup.setAutoHide(true);
+        popup.setAutoFix(true);
+        popup.setHideOnEscape(true);
+        popup.setConsumeAutoHidingEvents(true);
+
+        VBox commonWrapper = new VBox();
+        commonWrapper.getStylesheets().add(Main.class.getResource("styles/common.css").toExternalForm());
+        commonWrapper.setFillWidth(true);
+        commonWrapper.getStyleClass().add("popup-rename-wrapper");
+        Label descriptionAction = new Label(description);
+        descriptionAction.getStyleClass().add("popup-label");
+        TextField inputName = new TextField();
+        inputName.setOnAction(event -> {
+            addFolderAction(inputName.getText());
+            popup.hide();
+
+        });
+        inputName.getStyleClass().addAll("input-color", "popup-rename-input");
+        commonWrapper.getChildren().addAll(descriptionAction, inputName);
+
+        popup.getStyleClass().add("popup-rename");
+        popup.getScene().setRoot(commonWrapper);
+        var width = popup.getWidth() / 2;
+        var height = popup.getHeight() / 2;
+
+        var windowWidth = stage.getWidth() / 2;
+        var windowHeight = stage.getHeight() / 2;
+
+        var x = stage.getX() + windowWidth - width;
+        var y = stage.getY() + windowHeight - height;
+
+        popup.show(stage, x, y);
+    }
+
+    private void addFolderAction(String text) {
+        if (!serverSource.isSelected()) {
+            FileUtil.createFolder(currentCloudFolder.getPath(), text);
+            onReload();
+        } else {
+            File file = new File(currentCloudFolder.getPath(), text);
+            Connection.get().createFolder(file.getPath());
+        }
     }
 }

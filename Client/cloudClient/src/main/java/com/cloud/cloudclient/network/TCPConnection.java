@@ -146,6 +146,15 @@ public class TCPConnection {
         writeToServer(commandPacket);
     }
 
+    public synchronized void createFolder(String path) {
+        log.debug("Request for create folder: {}", path);
+        CommandPacket commandPacket = CommandPacket.builder()
+                .command(ServerCommand.CREATE_FOLDER)
+                .body(path)
+                .build();
+        writeToServerWithCredentials(commandPacket);
+    }
+
     private synchronized void writeToServer(CommandPacket commandPacket) {
         if (channel.isPresent() && channel.get().isWritable()) {
             channel.get().writeAndFlush(commandPacket);
