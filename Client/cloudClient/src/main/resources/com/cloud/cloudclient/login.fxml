@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      styleClass="root, first-color"
+      fx:controller="com.cloud.cloudclient.fxcontrollers.LoginController"
+      alignment="CENTER"
+      spacing="20"
+      stylesheets="@styles/common.css, @styles/login.css">
+	<TextField fx:id="inputLogin" styleClass="font-color, input-color" promptText="login"/>
+	<PasswordField fx:id="inputPassword" styleClass="font-color, input-color" promptText="password"/>
+	<Button fx:id="loginButton"
+	        styleClass="button-color"
+	        text="Login"
+	        onAction="#loginButtonAction"/>
+	<Button fx:id="signUpButton"
+	        styleClass="button-color-marked"
+	        text="Sign up"
+	        onAction="#signUpButtonAction"/>
+</VBox>

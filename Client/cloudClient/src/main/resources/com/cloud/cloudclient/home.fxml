@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox onMouseClicked="#backListener" spacing="10" styleClass="root" stylesheets="@styles/common.css, @styles/home.css"
+      xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.cloud.cloudclient.fxcontrollers.HomeController">
+
+	<VBox fx:id="tabsWrapper" spacing="10">
+		<ToggleButton fx:id="serverSource" alignment="CENTER_LEFT" selected="true" styleClass="home-toggle"/>
+		<ToggleButton fx:id="localSource" alignment="CENTER_LEFT" styleClass="home-toggle"/>
+	</VBox>
+
+	<VBox fx:id="homeWrapper" HBox.hgrow="ALWAYS">
+		<HBox fx:id="titleWrapper" maxWidth="Infinity" spacing="5">
+			<HBox fx:id="searchWrapper" styleClass="input-color" HBox.hgrow="ALWAYS">
+				<TextField fx:id="search" promptText="Search in drive" onKeyPressed="#searchInputListener"
+				           styleClass="input-color" HBox.hgrow="ALWAYS"/>
+				<Button fx:id="searchButton" onAction="#searchButtonListener"
+				        styleClass="button-rounded, search-button"/>
+			</HBox>
+			<HBox fx:id="settingsWrapper">
+				<Button fx:id="settings" styleClass="button-color-transparent, button-settings"/>
+				<Button fx:id="downloadsButton" onMouseClicked="#downloads"
+				        styleClass="button-color-transparent, button-settings"/>
+				<Button fx:id="account" styleClass="button-color-transparent, button-settings"/>
+			</HBox>
+
+		</HBox>
+
+		<HBox fx:id="toolBox" maxWidth="-Infinity" spacing="10">
+			<ToggleButton fx:id="tableView" selected="true"
+			              styleClass="button-color-transparent, tool-toggle, tool-button"/>
+			<ToggleButton fx:id="listView" styleClass="button-color-transparent, tool-toggle, tool-button"/>
+			<Button fx:id="reload" onMouseClicked="#onReload" styleClass="button-color-transparent, tool-button"/>
+			<Button fx:id="addFiles" onMouseClicked="#addFilesListener"
+			        styleClass="button-color-transparent, tool-button"/>
+		</HBox>
+
+		<ScrollPane fx:id="scrollPaneHome" fitToHeight="true" fitToWidth="true" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+
+		</ScrollPane>
+	</VBox>
+</HBox>

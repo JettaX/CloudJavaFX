@@ -1,0 +1,181 @@
+.first-color {
+    -fx-background-color: WHITE;
+}
+
+.second-color {
+    -fx-background-color: WHITE;
+    -fx-control-inner-background: WHITE;
+}
+
+.input-color, .toggle {
+    -fx-background-color: rgb(229, 234, 241);
+    -fx-border-color: rgb(229, 234, 241);
+}
+
+.input-color:hover {
+    -fx-border-color: #2155CD;
+}
+
+.toggle {
+    -fx-background-radius: 16px;
+    -fx-border-radius: 16px;
+    -fx-cursor: hand;
+}
+
+.toggle:selected {
+    -fx-background-color: #2155CD;
+    -fx-border-color: #2155CD;
+    -fx-text-fill: WHITE;
+}
+
+.button-color {
+    -fx-background-color: #2155CD;
+    -fx-text-fill: WHITE;
+}
+
+.button-color-transparent {
+    -fx-background-color: transparent;
+}
+
+.button-color-transparent:hover {
+    -fx-background-color: rgb(229, 234, 241);
+}
+
+.button-color-transparent:pressed {
+    -fx-background-color: transparent;
+}
+
+.button-color:hover {
+    -fx-background-color: #0AA1DD;
+}
+
+.button-color:pressed {
+    -fx-background-color: #79DAE8;
+}
+
+.button-color-marked {
+    -fx-background-color: #28DF99;
+    -fx-text-fill: WHITE;
+}
+
+.button-color-marked:hover {
+    -fx-background-color: #99F3BD;
+}
+
+.button-color-marked:pressed {
+    -fx-background-color: #D2F6C5;
+}
+
+.button-rounded {
+    -fx-background-radius: 50%;
+    -fx-border-radius: 50%;
+}
+
+.button-back {
+    -fx-pref-width: 40px;
+    -fx-pref-height: 40px;
+    -fx-max-width: 40px;
+    -fx-max-height: 40px;
+}
+
+.third-color {
+    -fx-background-color: lightgray;
+}
+
+.fourth-color {
+    -fx-background-color: #5f6368;
+}
+
+.font-color {
+    -fx-text-fill: BLACK;
+}
+
+.root {
+    -fx-font-family: 'Open Sans', sans-serif;
+    -fx-font-size: 16px;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-hbar-policy: never;
+    -fx-vbar-policy: never;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:horizontal, .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.increment-button, .decrement-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #2155CD;
+    -fx-background-radius: 5px;
+}
+
+.button {
+    -fx-pref-width: 100px;
+    -fx-pref-height: 50px;
+    -fx-cursor: hand;
+}
+
+.text-field, .text-field:disabled {
+    -fx-prompt-text-fill: Gray;
+    -fx-pref-height: 50px;
+}
+
+.text-area {
+    -fx-highlight-fill: Gray;
+}
+
+.menu-item {
+    -fx-text-fill: black;
+    -fx-prompt-text-fill: black;
+    -fx-pref-height: 30px;
+    -fx-pref-width: 180px;
+    -fx-background-color: transparent;
+    -fx-background-radius: 15px;
+}
+
+.menu-item:hover {
+    -fx-background-color: #2155CD;
+}
+
+.menu-item:focused {
+    -fx-background-color: #2155CD;
+}
+
+.context-menu {
+    -fx-background-radius: 15px;
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 30, 0, -20, 20);
+}
+
+.popup-rename-wrapper {
+    -fx-padding: 10;
+    -fx-max-width: 300;
+    -fx-max-height: 100;
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 30, 0, -20, 20);
+}
+
+.popup-rename-input {
+    -fx-max-width: 250;
+    -fx-max-height: 40;
+}

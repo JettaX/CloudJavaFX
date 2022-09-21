@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.cloud.cloudclient.fxcontrollers.SignupController"
+      onMouseClicked="#backListener"
+      stylesheets="@styles/common.css, @styles/signup.css">
+
+	<HBox>
+		<Button fx:id="buttonBack" onAction="#backButtonListener" styleClass="button-back, button-color-transparent"/>
+	</HBox>
+
+	<VBox fx:id="formWrapper" spacing="20" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS" alignment="CENTER">
+		<TextField fx:id="inputLogin" styleClass="font-color, input-color" promptText="login"/>
+		<PasswordField fx:id="inputPassword" styleClass="font-color, input-color" promptText="password"/>
+		<PasswordField fx:id="inputPasswordRepeated" styleClass="font-color, input-color"
+		               promptText="repeat password"/>
+		<Button fx:id="loginButton" styleClass="button-color" text="Done" onAction="#loginButtonAction"/>
+	</VBox>
+</VBox>

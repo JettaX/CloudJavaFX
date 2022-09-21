@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns="http://javafx.com/javafx"
+      onMouseClicked="#backListener"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:id="root"
+      fx:controller="com.cloud.cloudclient.fxcontrollers.DownloadsController"
+      stylesheets="@styles/common.css, @styles/downloads.css">
+
+	<HBox>
+		<Button fx:id="buttonBack" onAction="#backButtonListener" styleClass="button-back, button-color-transparent"/>
+	</HBox>
+
+	<VBox fx:id="downloadsWrapper" VBox.vgrow="ALWAYS">
+
+	</VBox>
+
+</VBox>

@@ -1,0 +1,3 @@
+#inputLogin, #inputPassword, #inputPasswordRepeated {
+    -fx-max-width: 300px;
+}

@@ -1,0 +1,13 @@
+.text-field {
+    -fx-max-width: 250px;
+}
+
+.button {
+    -fx-pref-width: 250px;
+    -fx-font-weight: bold;
+}
+
+.text-field, .button {
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+}

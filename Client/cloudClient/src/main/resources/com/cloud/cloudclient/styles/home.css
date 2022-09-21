@@ -1,0 +1,109 @@
+.root {
+    -fx-padding: 20;
+    -fx-background-color: White;
+}
+
+.button-rounded {
+    -fx-max-width: 40px;
+    -fx-max-height: 40px;
+}
+
+.button-settings {
+    -fx-max-width: 50px;
+    -fx-max-height: 50px;
+}
+
+.search-button {
+    -fx-background-color: transparent;
+}
+
+#titleWrapper, #searchWrapper, #search {
+    -fx-pref-height: 50px;
+    -fx-max-height: 50px;
+}
+
+#search {
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+}
+
+#searchWrapper {
+    -fx-background-radius: 16px;
+    -fx-border-radius: 16px;
+}
+
+.tool-button {
+    -fx-max-width: 30px;
+    -fx-max-height: 30px;
+}
+
+#titleWrapper {
+    -fx-padding: 0 0 10 0;
+}
+
+#tabsWrapper {
+    -fx-background-color: rgb(229, 234, 241);
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+    -fx-pref-width: 180px;
+    -fx-padding: 70 10 0 10;
+}
+
+.doc-table-view {
+    -fx-background-color: White;
+    -fx-pref-width: 120px;
+    -fx-pref-height: 120px;
+    -fx-text-alignment: center;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-border-width: 2px;
+    -fx-border-color: transparent;
+}
+
+.doc-list-view {
+    -fx-max-width: infinity;
+    -fx-max-height: 40px;
+    -fx-min-height: 40px;
+    -fx-background-color: White;
+}
+
+.doc-table-view:hover, .doc-list-view:hover {
+    -fx-border-color: #2155CD;
+    -fx-background-color: rgb(229, 234, 241);
+}
+
+.folders-wrapper {
+    -fx-padding: 10;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-background-color: rgb(229, 234, 241);
+    -fx-spacing: 10;
+    -fx-vgap: 10;
+    -fx-hgap: 10;
+}
+
+#scrollPaneHome {
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+}
+
+#toolBox {
+    -fx-padding: 0 0 10 0;
+}
+
+.home-toggle {
+    -fx-text-fill: White;
+    -fx-background-radius: 15px;
+    -fx-background-color: transparent;
+    -fx-pref-width: infinity;
+    -fx-cursor: hand;
+}
+
+.home-toggle:selected {
+    -fx-text-fill: Black;
+    -fx-background-color: White;
+}
+
+.tool-toggle:selected {
+    -fx-background-color: rgb(229, 234, 241);
+}

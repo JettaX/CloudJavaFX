@@ -1,0 +1,11 @@
+
+[	java:S1120"FDefine and throw a dedicated exception instead of using a generic one.(„ÝÓ´
+[	java:S1128"FDefine and throw a dedicated exception instead of using a generic one.(ºË±ó
+[	java:S112D"FDefine and throw a dedicated exception instead of using a generic one.(ºË±ó
+`	java:S112M"FDefine and throw a dedicated exception instead of using a generic one.(°î÷äùÿÿÿÿ
+H
+java:S4925."-Remove this "Class.forName()", it is useless.(õ†¨Äùÿÿÿÿ
+t
+java:S21427"^Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.(ä ¹€
+F
+java:S1172H"1Remove this unused method parameter "connection".(ÁŠ‘E

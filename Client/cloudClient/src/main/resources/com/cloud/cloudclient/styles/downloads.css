@@ -1,0 +1,47 @@
+#root {
+    -fx-background-color: rgb(229, 234, 241);
+}
+
+.indicatorDownloads {
+    -fx-max-width: infinity;
+    -fx-pref-height: 30px;
+}
+
+.progress-bar {
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+}
+
+.progress-bar .bar {
+    -fx-text-fill: White;
+    -fx-border-width: 0px;
+}
+
+.progress-bar .track {
+    -fx-background-color: White;
+    -fx-border-width: 0px;
+    -fx-effect: none;
+}
+
+.download-bar {
+    -fx-background-color: #28DF99;
+}
+
+.upload-bar {
+    -fx-background-color: #2155CD;
+}
+
+#downloadsWrapper {
+    -fx-padding: 10;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-vgap: 10;
+}
+
+.downloadWrapper {
+    -fx-background-insets: 10px;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-background-color: rgb(229, 234, 241);
+    -fx-vgap: 10;
+}
