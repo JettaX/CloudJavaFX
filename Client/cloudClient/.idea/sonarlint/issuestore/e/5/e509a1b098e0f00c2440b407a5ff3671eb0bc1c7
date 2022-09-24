@@ -1,11 +1,0 @@
-
-z
-java:S1149"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(ú¯õÎúÿÿÿÿ
-P
-java:S1118":Add a private constructor to hide the implicit public one.(Ô¡þ“
-b	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(û³­6
-h	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ëƒüªýÿÿÿÿ
-c	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(§¢Á–
-c	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Æ×‘ÿ
-E
-java:S1197"*Move the array designators [] to the type.(ÔïÏ‚ûÿÿÿÿ

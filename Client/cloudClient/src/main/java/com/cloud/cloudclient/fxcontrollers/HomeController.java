@@ -6,7 +6,9 @@ import com.cloud.cloudclient.network.Connection;
 import com.cloud.cloudclient.utils.FileUtil;
 import com.cloud.cloudclient.utils.FilesChecker;
 import com.cloud.cloudclient.view.Indicators;
+import com.cloud.cloudclient.view.PopupControlRename;
 import com.cloud.cloudclient.view.utils.RoundPicture;
+import com.cloud.cloudclient.view.utils.WindowUtil;
 import com.cloud.common.entity.CloudFile;
 import com.cloud.common.entity.CloudFolder;
 import javafx.application.HostServices;
@@ -303,15 +305,34 @@ public class HomeController {
         saveFileListener(save, contextMenu, cloudFile);
         MenuItem delete = new MenuItem("Delete");
         deleteFileListener(delete, cloudFile);
+        MenuItem rename = new MenuItem("Rename");
+        renameFileListener(rename, cloudFile);
         contextMenu.getItems().add(save);
         contextMenu.getItems().add(delete);
+        contextMenu.getItems().add(rename);
         return contextMenu;
+    }
+
+    private void renameFileListener(MenuItem rename, CloudFile cloudFile) {
+        rename.setOnAction(event -> {
+            PopupControlRename popup = new PopupControlRename("rename file", cloudFile.getName());
+            if (serverSource.isSelected()) {
+                popup.getInputName().setOnAction(popEvent -> new Thread(() -> Connection.get()
+                        .renameFile(cloudFile, popup.getInputName().getText())).start());
+            } else {
+                popup.getInputName().setOnAction(popEvent -> {
+                    FileUtil.renameFile(cloudFile, popup.getInputName().getText());
+                    onReload();
+                });
+            }
+            showDialog(popup);
+        });
     }
 
     private void deleteFileListener(MenuItem delete, CloudFile cloudFile) {
         delete.setOnAction(event -> {
             if (serverSource.isSelected()) {
-                Connection.get().deleteFile(cloudFile.getPath());
+                new Thread(() -> Connection.get().deleteFile(cloudFile.getPath())).start();
             } else {
                 FileUtil.deleteFile(cloudFile.getPath());
                 onReload();
@@ -491,45 +512,19 @@ public class HomeController {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem addFolder = new MenuItem("add folder");
         graphicsApply(addFolder, "/images/icon/folder-open.png", 20, 20);
-        addFolder.setOnAction(event -> showDialog("enter file name"));
+        addFolder.setOnAction(event -> showDialog(createAddDialog("enter file name")));
         contextMenu.getItems().add(addFolder);
         return contextMenu;
     }
 
-    public void showDialog(String description) {
-        PopupControl popup = new PopupControl();
-        popup.setAutoHide(true);
-        popup.setAutoFix(true);
-        popup.setHideOnEscape(true);
-        popup.setConsumeAutoHidingEvents(true);
+    private PopupControl createAddDialog(String description) {
+        PopupControlRename popup = new PopupControlRename(description, "");
 
-        VBox commonWrapper = new VBox();
-        commonWrapper.getStylesheets().add(Main.class.getResource("styles/common.css").toExternalForm());
-        commonWrapper.setFillWidth(true);
-        commonWrapper.getStyleClass().add("popup-rename-wrapper");
-        Label descriptionAction = new Label(description);
-        descriptionAction.getStyleClass().add("popup-label");
-        TextField inputName = new TextField();
-        inputName.setOnAction(event -> {
-            addFolderAction(inputName.getText());
+        popup.getInputName().setOnAction(event -> {
+            addFolderAction(popup.getInputName().getText());
             popup.hide();
-
         });
-        inputName.getStyleClass().addAll("input-color", "popup-rename-input");
-        commonWrapper.getChildren().addAll(descriptionAction, inputName);
-
-        popup.getStyleClass().add("popup-rename");
-        popup.getScene().setRoot(commonWrapper);
-        var width = popup.getWidth() / 2;
-        var height = popup.getHeight() / 2;
-
-        var windowWidth = stage.getWidth() / 2;
-        var windowHeight = stage.getHeight() / 2;
-
-        var x = stage.getX() + windowWidth - width;
-        var y = stage.getY() + windowHeight - height;
-
-        popup.show(stage, x, y);
+        return popup;
     }
 
     private void addFolderAction(String text) {
@@ -538,7 +533,14 @@ public class HomeController {
             onReload();
         } else {
             File file = new File(currentCloudFolder.getPath(), text);
-            Connection.get().createFolder(file.getPath());
+            new Thread(() -> Connection.get().createFolder(file.getPath())).start();
         }
+    }
+
+    public void showDialog(PopupControl popup) {
+        popup.show(
+                stage,
+                WindowUtil.getWidthCenter(popup.getScene(), stage),
+                WindowUtil.getHeightCenter(popup.getScene(), stage));
     }
 }

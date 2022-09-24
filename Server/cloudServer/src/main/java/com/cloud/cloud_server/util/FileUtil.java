@@ -58,6 +58,12 @@ public class FileUtil {
         return file;
     }
 
+    public static void renameFile(String path, String oldName, String newName) {
+        File file = new File(path);
+        String newPath = path.split(oldName)[0];
+        file.renameTo(new File(newPath, newName));
+    }
+
     public static File getFile(String path) throws FileNotFoundException {
         File file = new File(path);
         if (file.exists()) {

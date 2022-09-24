@@ -1,7 +1,6 @@
 package com.cloud.cloudclient.network;
 
 
-import com.cloud.cloudclient.Main;
 import com.cloud.common.entity.CommandPacket;
 import com.cloud.common.entity.FilePacket;
 import com.cloud.common.util.ServerCommand;
@@ -37,7 +36,7 @@ public class CommonHandler extends SimpleChannelInboundHandler<CommandPacket> {
             eventListener.onAuthSuccess(commandPacket.getBody());
         } else if (command.equals(ServerCommand.TOKEN_UPDATE.getCommand())) {
             log.debug("TOKEN_UPDATE");
-            Main.token = commandPacket.getToken();
+            eventListener.onTokenUpdate(commandPacket.getToken());
         } else if (ServerCommand.AUTHENTICATE_ATTEMPT.getCommand().equals(command)) {
             log.debug("AUTHENTICATE_ATTEMPT");
             eventListener.onAttemptAuth(commandPacket.getBody());

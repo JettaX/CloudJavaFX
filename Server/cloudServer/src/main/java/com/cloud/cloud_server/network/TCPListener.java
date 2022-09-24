@@ -1,9 +1,6 @@
 package com.cloud.cloud_server.network;
 
-import com.cloud.cloud_server.dao.UserDAO;
-import com.cloud.cloud_server.dao.UserDaoJDBC;
-import com.cloud.cloud_server.dao.UserSecureDAO;
-import com.cloud.cloud_server.dao.UserSecureDaoJDBC;
+import com.cloud.cloud_server.dao.*;
 import com.cloud.cloud_server.entity.User;
 import com.cloud.cloud_server.util.FileUtil;
 import com.cloud.common.entity.CloudFolder;
@@ -29,12 +26,14 @@ public class TCPListener implements TCPConnectionListener {
     private ConnectionUtil connectionUtil;
     private final UserSecureDAO userSecureDAO;
     private final UserDAO userDAO;
+    private final TokenDao tokenDao;
 
     public TCPListener() {
         tokens = new ConcurrentHashMap<>();
         connectionUtil = new ConnectionUtil();
         userSecureDAO = UserSecureDaoJDBC.getINSTANCE();
         userDAO = UserDaoJDBC.getINSTANCE();
+        tokenDao = TokenDaoJDBC.getINSTANCE();
     }
 
     @Override
@@ -74,8 +73,9 @@ public class TCPListener implements TCPConnectionListener {
                     .build();
             connectionUtil.writeToClient(ctx, commandPacket);
         } else {
-            // TODO not secure
-            tokens.put(username, new BigInteger(165, new Random()).toString(36).toUpperCase());
+            String token = new BigInteger(165, new Random()).toString(36).toUpperCase();
+            tokens.put(username, token);
+            tokenDao.set(username, token);
             onAuthSuccess(ctx, username);
             CommandPacket commandPacket = CommandPacket.builder()
                     .command(ServerCommand.TOKEN_UPDATE)
@@ -89,7 +89,7 @@ public class TCPListener implements TCPConnectionListener {
     public void onAttemptAuthWithToken(ChannelHandlerContext ctx, String loginToken) {
         String login = loginToken.split(":")[0].trim();
         String token = loginToken.split(":")[1].trim();
-        if (!tokens.containsKey(login) || !tokens.get(login).equals(token)) {
+        if (!isTokenValid(login,token)) {
             onAuthFailed(ctx, "Token is incorrect");
         }
     }
@@ -202,13 +202,29 @@ public class TCPListener implements TCPConnectionListener {
         FileUtil.createFolder(commandPacket.getBody());
     }
 
+    @Override
+    public void onRenameFile(ChannelHandlerContext ctx, CommandPacket commandPacket) {
+        FilePacket filePacket = (FilePacket) commandPacket.getObject();
+        FileUtil.renameFile(filePacket.getFilePath(), filePacket.getFileName(), commandPacket.getBody());
+    }
+
     private void writeToFile(File file, long size, byte[] bytes, boolean isFirst) throws IOException {
         try (FileOutputStream writer = new FileOutputStream(file, !isFirst)) {
             writer.write(bytes);
         }
     }
 
-    public boolean checkToken(String userName, String token) {
-        return tokens.get(userName).equals(token);
+    public boolean isTokenValid(String userName, String token) {
+        if (tokens.containsKey(userName)) {
+            return tokens.get(userName).equals(token);
+        }
+
+        String bdToken = tokenDao.get(userName);
+        if (token.equals(bdToken)) {
+            tokens.put(userName, bdToken);
+            return true;
+        }
+
+        return false;
     }
 }

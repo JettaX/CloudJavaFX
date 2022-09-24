@@ -1,6 +1,6 @@
 package com.cloud.cloudclient.utils;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.Properties;
 
 public final class PropertiesUtil {
@@ -20,5 +20,16 @@ public final class PropertiesUtil {
 
     public static String getProperty(String key) {
         return PROPERTIES.getProperty(key);
+    }
+
+    public static void setProperty(String key, String value) {
+        PROPERTIES.setProperty(key, value);
+        try (OutputStreamWriter out =
+                     new OutputStreamWriter(new FileOutputStream("src/main/resources/application.properties"))) {
+            PROPERTIES.store(out, "");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

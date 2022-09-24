@@ -2,6 +2,7 @@ package com.cloud.cloudclient.network;
 
 
 import com.cloud.cloudclient.Main;
+import com.cloud.common.entity.CloudFile;
 import com.cloud.common.entity.CloudFolder;
 import com.cloud.common.entity.CommandPacket;
 import com.cloud.common.entity.FilePacket;
@@ -53,6 +54,21 @@ public class TCPConnection {
                 .command(ServerCommand.DELETE_FILE)
                 .body(filePathToServer)
                 .build();
+        writeToServerWithCredentials(commandPacket);
+    }
+
+    public synchronized void renameFile(CloudFile cloudFile, String newName) {
+        FilePacket filePacket = FilePacket.builder()
+                .fileName(cloudFile.getName())
+                .filePath(cloudFile.getPath())
+                .build();
+
+        CommandPacket commandPacket = CommandPacket.builder()
+                .command(ServerCommand.RENAME_FILE)
+                .object(filePacket)
+                .body(newName)
+                .build();
+
         writeToServerWithCredentials(commandPacket);
     }
 

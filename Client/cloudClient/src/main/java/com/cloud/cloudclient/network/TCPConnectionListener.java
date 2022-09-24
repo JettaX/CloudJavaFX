@@ -21,6 +21,8 @@ public interface TCPConnectionListener {
 
     void onAuthFailed(String message);
 
+    void onTokenUpdate(String token);
+
     void onRequestFileForFolder(String paths);
 
     void onReceivedFileForFolder(String path, long size, boolean isFirst, byte[] bytes);

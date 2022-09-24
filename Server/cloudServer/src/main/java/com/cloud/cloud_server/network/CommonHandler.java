@@ -43,7 +43,7 @@ public class CommonHandler extends SimpleChannelInboundHandler<CommandPacket> {
         } else if (command.equals(ServerCommand.AUTH_SIGN_UP.getCommand())) {
             log.debug(command);
             eventListener.onSignUpAttempt(ctx, commandPacket);
-        } else if (!eventListener.checkToken(commandPacket.getUsername(), commandPacket.getToken())) {
+        } else if (eventListener.isTokenValid(commandPacket.getUsername(), commandPacket.getToken())) {
             log.debug("Checked token success");
             eventListener.onDisconnect(ctx, commandPacket.getUsername());
         } else if (command.equals(ServerCommand.REQUEST_STRUCTURE.getCommand())) {
@@ -72,6 +72,9 @@ public class CommonHandler extends SimpleChannelInboundHandler<CommandPacket> {
         } else if (command.equals(ServerCommand.CREATE_FOLDER.getCommand())) {
             log.debug(command);
             eventListener.onCreateFolder(ctx, commandPacket);
+        } else if (command.equals(ServerCommand.RENAME_FILE.getCommand())) {
+            log.debug(command);
+            eventListener.onRenameFile(ctx, commandPacket);
         }
     }
 

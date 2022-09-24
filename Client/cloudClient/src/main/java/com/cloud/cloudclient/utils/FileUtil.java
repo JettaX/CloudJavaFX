@@ -57,6 +57,12 @@ public class FileUtil {
         saveFolderIteration(cloudFolder, file);
     }
 
+    public static void renameFile(CloudFile cloudFile, String newName) {
+        File file = new File(cloudFile.getPath());
+        String newPath = cloudFile.getPath().split(cloudFile.getName())[0];
+        file.renameTo(new File(newPath, newName));
+    }
+
     public static void moveFile(String fileName, String filePath, String folderPath) throws IOException {
         File file = new File(folderPath, fileName);
         if (!file.exists()) {
