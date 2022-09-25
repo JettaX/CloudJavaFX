@@ -6,5 +6,6 @@ public enum ActiveScreen {
     DOWNLOADS,
     SETTINGS,
     ERROR,
-    SIGNUP
+    SIGNUP,
+    TOKEN_AUTH
 }

@@ -86,11 +86,13 @@ public class TCPListener implements TCPConnectionListener {
     }
 
     @Override
-    public void onAttemptAuthWithToken(ChannelHandlerContext ctx, String loginToken) {
-        String login = loginToken.split(":")[0].trim();
-        String token = loginToken.split(":")[1].trim();
-        if (!isTokenValid(login,token)) {
+    public void onAttemptAuthWithToken(ChannelHandlerContext ctx, CommandPacket commandPacket) {
+        String login = commandPacket.getUsername();
+        String token = commandPacket.getToken();
+        if (!isTokenValid(login, token)) {
             onAuthFailed(ctx, "Token is incorrect");
+        } else {
+            onAuthSuccess(ctx, login);
         }
     }
 

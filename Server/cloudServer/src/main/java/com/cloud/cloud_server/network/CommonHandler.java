@@ -39,7 +39,7 @@ public class CommonHandler extends SimpleChannelInboundHandler<CommandPacket> {
             eventListener.onAttemptAuthWithLoginPassword(ctx, commandPacket.getUsername(), commandPacket.getBody());
         } else if (command.equals(ServerCommand.AUTH_WITH_TOKEN.getCommand())) {
             log.debug(command);
-            eventListener.onAttemptAuthWithToken(ctx, commandPacket.getToken());
+            eventListener.onAttemptAuthWithToken(ctx, commandPacket);
         } else if (command.equals(ServerCommand.AUTH_SIGN_UP.getCommand())) {
             log.debug(command);
             eventListener.onSignUpAttempt(ctx, commandPacket);

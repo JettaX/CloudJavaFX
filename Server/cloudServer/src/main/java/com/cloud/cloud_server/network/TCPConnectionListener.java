@@ -12,7 +12,7 @@ public interface TCPConnectionListener {
     void onException(ChannelHandlerContext ctx, Exception e);
     void onRequestFile(ChannelHandlerContext ctx, String fileName);
     void onAttemptAuthWithLoginPassword(ChannelHandlerContext ctx, String username, String password) throws IOException;
-    void onAttemptAuthWithToken(ChannelHandlerContext ctx, String loginToken) throws IOException;
+    void onAttemptAuthWithToken(ChannelHandlerContext ctx, CommandPacket commandPacket) throws IOException;
     void onAuthSuccess(ChannelHandlerContext ctx, String login);
     void onAuthFailed(ChannelHandlerContext ctx, String message);
     void onReceivingFile(ChannelHandlerContext ctx, CommandPacket commandPacket, FilePacket filePacket);

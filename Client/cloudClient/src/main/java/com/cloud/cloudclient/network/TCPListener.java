@@ -95,6 +95,7 @@ public class TCPListener implements TCPConnectionListener {
                     throw new IOException("Login is null");
                 }
                 Main.user = userDAO.getUserByUserName(login);
+                PropertiesUtil.setProperty("username", login);
                 Platform.runLater(() -> FilesChecker.refillLocalFiles(FileUtil.getRootFolder()));
                 Main.showHome();
             } catch (RuntimeException e) {
@@ -113,7 +114,7 @@ public class TCPListener implements TCPConnectionListener {
     @Override
     public void onTokenUpdate(String token) {
         Main.token = token;
-        PropertiesUtil.setProperty("token",token);
+        PropertiesUtil.setProperty("token", token);
     }
 
     @Override

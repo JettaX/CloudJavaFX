@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -17,7 +18,10 @@ public class LoginController {
     public TextField inputLogin;
     @FXML
     public TextField inputPassword;
+    @FXML
     public Button signUpButton;
+    @FXML
+    public VBox authWrapper;
 
     public void loginButtonAction() {
         String login = inputLogin.getText();

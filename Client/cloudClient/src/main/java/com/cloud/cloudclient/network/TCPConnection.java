@@ -58,6 +58,7 @@ public class TCPConnection {
     }
 
     public synchronized void renameFile(CloudFile cloudFile, String newName) {
+        log.debug("Rename file: {}", cloudFile.getName());
         FilePacket filePacket = FilePacket.builder()
                 .fileName(cloudFile.getName())
                 .filePath(cloudFile.getPath())
@@ -70,6 +71,16 @@ public class TCPConnection {
                 .build();
 
         writeToServerWithCredentials(commandPacket);
+    }
+
+    public synchronized void authWithToken(String token, String username) {
+        log.debug("Auth with token");
+        CommandPacket commandPacket = CommandPacket.builder()
+                .command(ServerCommand.AUTH_WITH_TOKEN)
+                .username(username)
+                .token(token)
+                .build();
+        writeToServer(commandPacket);
     }
 
     public synchronized void requestFile(String path) {

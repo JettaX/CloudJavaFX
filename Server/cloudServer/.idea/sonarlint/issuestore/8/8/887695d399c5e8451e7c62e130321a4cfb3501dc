@@ -1,0 +1,17 @@
+
+`	java:S112c"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ
+\	java:S899)"BDo something with the "boolean" value returned by "createNewFile".(Ğ’Íùÿÿÿÿ
+\	java:S8991"BDo something with the "boolean" value returned by "createNewFile".(Ğ’Íùÿÿÿÿ
+\	java:S8998"BDo something with the "boolean" value returned by "createNewFile".(Ğ’Íùÿÿÿÿ
+R	java:S899@"=Do something with the "boolean" value returned by "renameTo".(ù°Ú¬
+‡
+java:S1130K"lRemove the declaration of thrown exception 'java.io.IOException', as it cannot be thrown from method's body.(ìış´üÿÿÿÿ
+V	java:S899ƒ";Do something with the "boolean" value returned by "delete".(²Œ­ûÿÿÿÿ
+j
+java:S4042ƒ"NUse "java.nio.file.Files#delete" here for better messages on error conditions.(²Œ­ûÿÿÿÿ
+V	java:S899";Do something with the "boolean" value returned by "delete".(é‘‚©úÿÿÿÿ
+j
+java:S4042"NUse "java.nio.file.Files#delete" here for better messages on error conditions.(é‘‚©úÿÿÿÿ
+V	java:S899’";Do something with the "boolean" value returned by "delete".(²Œ­ûÿÿÿÿ
+j
+java:S4042’"NUse "java.nio.file.Files#delete" here for better messages on error conditions.(²Œ­ûÿÿÿÿ

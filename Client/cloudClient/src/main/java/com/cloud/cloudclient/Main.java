@@ -25,6 +25,7 @@ public class Main extends Application {
     public static CloudFolder root;
     public static String token;
     private static Stage stage;
+    public static boolean isFirst = true;
     private static HomeController homeController;
     private static ActiveScreen activeScreen;
     public static boolean isServerConnected = false;
@@ -44,7 +45,8 @@ public class Main extends Application {
         stage.setWidth(800);
         stage.setHeight(600);
         TCPListener.createNewInstance();
-        showLogin();
+        /*showLogin();*/
+        showAuthToken();
     }
 
     public static void showError(String message, BackUrl back) {
@@ -59,6 +61,12 @@ public class Main extends Application {
         activeScreen = ActiveScreen.LOGIN;
         stage.close();
         createStage("login.fxml");
+    }
+
+    public static void showAuthToken() {
+        activeScreen = ActiveScreen.TOKEN_AUTH;
+        stage.close();
+        createStage("authToken.fxml");
     }
 
     public static void showSignUp() {
