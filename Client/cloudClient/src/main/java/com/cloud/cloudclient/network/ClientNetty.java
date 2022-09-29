@@ -50,7 +50,6 @@ public class ClientNetty {
                 group.shutdownGracefully().sync();
                 Main.disconnect();
                 reconnect(connection);
-
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

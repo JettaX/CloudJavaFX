@@ -57,9 +57,9 @@ public class FileUtil {
         saveFolderIteration(cloudFolder, file);
     }
 
-    public static void renameFile(CloudFile cloudFile, String newName) {
-        File file = new File(cloudFile.getPath());
-        String newPath = cloudFile.getPath().split(cloudFile.getName())[0];
+    public static void renameFile(String path, String oldName, String newName) {
+        File file = new File(path);
+        String newPath = path.split(oldName)[0];
         file.renameTo(new File(newPath, newName));
     }
 
@@ -69,6 +69,10 @@ public class FileUtil {
             file.createNewFile();
         }
         Files.move(Path.of(filePath), Path.of(file.getAbsolutePath()), StandardCopyOption.REPLACE_EXISTING);
+        File file1 = new File(filePath);
+        if (file.exists()) {
+            Files.delete(Path.of(filePath));
+        }
     }
 
     private static void saveFolderIteration(CloudFolder cloudFolder, File file) {

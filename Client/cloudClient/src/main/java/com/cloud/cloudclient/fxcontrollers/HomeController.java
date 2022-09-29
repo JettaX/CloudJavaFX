@@ -238,6 +238,21 @@ public class HomeController {
     private ContextMenu createContextMenuForFolder(CloudFolder cloudFolder) {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem save = new MenuItem(serverSource.isSelected() ? "Save to local" : "Save to Server");
+        saveFolderListener(save, cloudFolder);
+
+        MenuItem delete = new MenuItem("Delete");
+        deleteFolderListener(delete, cloudFolder);
+
+        MenuItem rename = new MenuItem("Rename");
+        renameFileListener(rename, cloudFolder.getName(), cloudFolder.getPath());
+
+        contextMenu.getItems().add(save);
+        contextMenu.getItems().add(delete);
+        contextMenu.getItems().add(rename);
+        return contextMenu;
+    }
+
+    private void saveFolderListener(MenuItem save, CloudFolder cloudFolder) {
         save.setOnAction(event1 -> {
             if (serverSource.isSelected()) {
                 new Thread(() -> FileUtil.saveFolder(cloudFolder)).start();
@@ -245,13 +260,6 @@ public class HomeController {
                 new Thread(() -> Connection.get().sendFolder(cloudFolder)).start();
             }
         });
-
-        MenuItem delete = new MenuItem("Delete");
-        deleteFolderListener(delete, cloudFolder);
-
-        contextMenu.getItems().add(save);
-        contextMenu.getItems().add(delete);
-        return contextMenu;
     }
 
     private void deleteFolderListener(MenuItem delete, CloudFolder cloudFolder) {
@@ -259,7 +267,10 @@ public class HomeController {
             if (serverSource.isSelected()) {
                 new Thread(() -> Connection.get().deleteFile(cloudFolder.getPath())).start();
             } else {
-                new Thread(() -> FileUtil.deleteFolder(cloudFolder.getPath())).start();
+                new Thread(() -> {
+                    FileUtil.deleteFolder(cloudFolder.getPath());
+                    Platform.runLater(this::onReload);
+                }).start();
             }
         });
     }
@@ -306,22 +317,22 @@ public class HomeController {
         MenuItem delete = new MenuItem("Delete");
         deleteFileListener(delete, cloudFile);
         MenuItem rename = new MenuItem("Rename");
-        renameFileListener(rename, cloudFile);
+        renameFileListener(rename, cloudFile.getName(), cloudFile.getPath());
         contextMenu.getItems().add(save);
         contextMenu.getItems().add(delete);
         contextMenu.getItems().add(rename);
         return contextMenu;
     }
 
-    private void renameFileListener(MenuItem rename, CloudFile cloudFile) {
+    private void renameFileListener(MenuItem rename, String name, String path) {
         rename.setOnAction(event -> {
-            PopupControlRename popup = new PopupControlRename("rename file", cloudFile.getName());
+            PopupControlRename popup = new PopupControlRename("rename file", name);
             if (serverSource.isSelected()) {
                 popup.getInputName().setOnAction(popEvent -> new Thread(() -> Connection.get()
-                        .renameFile(cloudFile, popup.getInputName().getText())).start());
+                        .renameFile(path, name, popup.getInputName().getText())).start());
             } else {
                 popup.getInputName().setOnAction(popEvent -> {
-                    FileUtil.renameFile(cloudFile, popup.getInputName().getText());
+                    FileUtil.renameFile(path, name, popup.getInputName().getText());
                     onReload();
                 });
             }
