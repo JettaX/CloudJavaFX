@@ -2,6 +2,7 @@ package com.cloud.cloud_server.network;
 
 import com.cloud.common.entity.CommandPacket;
 import com.cloud.common.entity.FilePacket;
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.io.IOException;
@@ -15,13 +16,13 @@ public interface TCPConnectionListener {
     void onAttemptAuthWithToken(ChannelHandlerContext ctx, CommandPacket commandPacket) throws IOException;
     void onAuthSuccess(ChannelHandlerContext ctx, String login);
     void onAuthFailed(ChannelHandlerContext ctx, String message);
-    void onReceivingFile(ChannelHandlerContext ctx, CommandPacket commandPacket, FilePacket filePacket);
+    void onReceivingFile(ChannelHandlerContext ctx, CommandPacket commandPacket, FilePacket filePacket, ByteBuf buf);
     void onReceivedFile(ChannelHandlerContext ctx, String userName);
     void onRequestStructure(ChannelHandlerContext ctx, String userName);
     void onDeletedFile(ChannelHandlerContext ctx, String filePath);
     void onReceivedFolder(ChannelHandlerContext ctx, String folder, String login);
     void onRequestFolder(ChannelHandlerContext ctx, String folderPath);
-    void onReceivedFileForFolder(ChannelHandlerContext ctx, FilePacket filePacket);
+    void onReceivedFileForFolder(ChannelHandlerContext ctx, FilePacket filePacket, ByteBuf buf);
     void onRequestFileForFolder(ChannelHandlerContext ctx, String paths);
     void onSignUpAttempt(ChannelHandlerContext ctx, CommandPacket commandPacket);
     void onCreateFolder(ChannelHandlerContext ctx, CommandPacket commandPacket);

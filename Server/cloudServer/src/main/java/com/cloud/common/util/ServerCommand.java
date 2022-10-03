@@ -20,6 +20,7 @@ public enum ServerCommand implements Serializable {
     STRUCTURE("/structure"),
     REQUEST_STRUCTURE("/request_structure"),
     RENAME_FILE("/rename_file"),
+    FILE_SENT("/file_sent"),
     DELETE_FILE("/delete_file");
     private String command;
 

@@ -8,13 +8,11 @@ import com.cloud.common.entity.CommandPacket;
 import com.cloud.common.entity.FilePacket;
 import com.cloud.common.util.ServerCommand;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigInteger;
 import java.util.Map;
 import java.util.Random;
@@ -117,11 +115,12 @@ public class TCPListener implements TCPConnectionListener {
     }
 
     @Override
-    public void onReceivingFile(ChannelHandlerContext ctx, CommandPacket commandPacket, FilePacket filePacket) {
+    public void onReceivingFile(ChannelHandlerContext ctx, CommandPacket commandPacket, FilePacket filePacket,
+                                ByteBuf buf) {
         log.debug("Receive file {}", filePacket.getFileName());
         try {
             File file = FileUtil.saveFile(filePacket.getFileName(), commandPacket.getUsername());
-            writeToFile(file, filePacket.getFileSize(), filePacket.getFileContent(), filePacket.isFirst());
+            writeToFile(file, buf);
         } catch (IOException e) {
             log.warn("Error receiving file: {}", e.getMessage());
             throw new RuntimeException(e);
@@ -164,10 +163,10 @@ public class TCPListener implements TCPConnectionListener {
     }
 
     @Override
-    public void onReceivedFileForFolder(ChannelHandlerContext ctx, FilePacket filePacket) {
+    public void onReceivedFileForFolder(ChannelHandlerContext ctx, FilePacket filePacket, ByteBuf buf) {
         try {
             File file = FileUtil.getFile(filePacket.getFilePath());
-            writeToFile(file, filePacket.getFileSize(), filePacket.getFileContent(), filePacket.isFirst());
+            writeToFile(file, buf);
         } catch (IOException e) {
             log.warn("Error receiving file: {}", e.getMessage());
             throw new RuntimeException(e);
@@ -210,8 +209,11 @@ public class TCPListener implements TCPConnectionListener {
         FileUtil.renameFile(filePacket.getFilePath(), filePacket.getFileName(), commandPacket.getBody());
     }
 
-    private void writeToFile(File file, long size, byte[] bytes, boolean isFirst) throws IOException {
-        try (FileOutputStream writer = new FileOutputStream(file, !isFirst)) {
+    private void writeToFile(File file, ByteBuf buf) throws IOException {
+        try (BufferedOutputStream writer = new BufferedOutputStream(new FileOutputStream(file, true))) {
+            int readable = buf.readableBytes();
+            byte[] bytes = new byte[readable];
+            buf.getBytes(buf.readerIndex(), bytes);
             writer.write(bytes);
         }
     }

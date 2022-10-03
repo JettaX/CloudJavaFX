@@ -8,9 +8,9 @@ import com.cloud.common.util.ServerCommand;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.stream.ChunkedStream;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -92,20 +92,10 @@ public class ConnectionUtil {
     }
 
     private void sendFile(File file, CommandPacket commandPacket, FilePacket filePacket, ChannelHandlerContext ctx) throws IOException {
-        try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(file))) {
-            var lengthReadBytes = 50000;
-            filePacket.setFirst(true);
-            while (reader.available() > 0) {
-                checkAvailable(ctx.channel());
-                filePacket.setFileContent(reader.readNBytes(lengthReadBytes));
-                commandPacket.setObject(filePacket);
-                ctx.channel().writeAndFlush(commandPacket);
-                filePacket.setFirst(false);
-                Thread.sleep(50);
-            }
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        commandPacket.setObject(filePacket);
+        ctx.writeAndFlush(commandPacket);
+        ctx.writeAndFlush(new ChunkedStream(new FileInputStream(file), 2048)).addListener(future ->
+                ctx.channel().close());
     }
 
     private void checkAvailable(Channel channel) throws InterruptedException {
