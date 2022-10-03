@@ -11,6 +11,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
+import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.util.ResourceLeakDetector;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,8 +33,10 @@ public class ClientNetty {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
-                        ch.pipeline().addLast(new ObjectEncoder());
-                        ch.pipeline().addLast(new ObjectDecoder(Integer.MAX_VALUE, ClassResolvers.cacheDisabled(null)));
+                        ch.pipeline().addLast("encoder", new ObjectEncoder());
+                        ch.pipeline().addLast("decoder", new ObjectDecoder(Integer.MAX_VALUE,
+                                ClassResolvers.cacheDisabled(null)));
+                        ch.pipeline().addLast(new ChunkedWriteHandler());
                         ch.pipeline().addLast(new CommonHandler());
                     }
                 });
@@ -53,6 +56,19 @@ public class ClientNetty {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    public static void getNewChannel() {
+        Bootstrap boot = bootstrap.clone();
+        try {
+            ChannelFuture f = boot.connect().sync();
+            Connection.setDownloadConnection(f);
+            f.channel().closeFuture().sync();
+        } catch (InterruptedException e) {
+            log.debug("Connection download interrupted");
+        } finally {
+            Connection.closeDownloadConnection();
         }
     }
 

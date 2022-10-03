@@ -15,6 +15,8 @@ module com.cloud.cloudclient {
     requires io.netty.transport;
     requires io.netty.common;
     requires io.netty.codec;
+    requires io.netty.handler;
+    requires io.netty.buffer;
 
     opens com.cloud.cloudclient to javafx.fxml;
     exports com.cloud.cloudclient;

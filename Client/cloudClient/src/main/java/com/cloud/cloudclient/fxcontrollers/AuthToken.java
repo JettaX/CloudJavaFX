@@ -24,9 +24,13 @@ public class AuthToken {
     private String token;
 
     public void initialize() {
-        userDAO = UserDaoJDBC.getINSTANCE();
         username = PropertiesUtil.getProperty("username");
         token = PropertiesUtil.getProperty("token");
+        if (username.equals("null") || token.equals("null")) {
+            Main.showLogin();
+            return;
+        }
+        userDAO = UserDaoJDBC.getINSTANCE();
         User user = userDAO.getUserByUserName(username);
         imageWrapper.getChildren().add(RoundPicture.getRoundPicture(50, user.getImageUrl()));
     }

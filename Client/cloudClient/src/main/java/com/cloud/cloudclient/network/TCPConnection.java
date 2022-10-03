@@ -9,6 +9,7 @@ import com.cloud.common.util.SHAUtils;
 import com.cloud.common.util.ServerCommand;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -88,7 +89,7 @@ public class TCPConnection {
                 .command(ServerCommand.REQUEST_FILE)
                 .body(path)
                 .build();
-        writeToServerWithCredentials(commandPacket);
+        writeToServerWithCredentialsAndNewChannel(commandPacket);
     }
 
     public synchronized void requestStructure() {
@@ -163,7 +164,14 @@ public class TCPConnection {
                 .command(ServerCommand.REQUEST_FILE_FOR_FOLDER)
                 .body(pathServer.concat(":sep:").concat(pathClient))
                 .build();
-        writeToServerWithCredentials(commandPacket);
+        writeToServerWithCredentialsAndNewChannel(commandPacket);
+    }
+
+    private void writeToServerWithCredentialsAndNewChannel(CommandPacket commandPacket) {
+        commandPacket.setToken(Main.token);
+        commandPacket.setUsername(Main.user.getUsername());
+        ChannelFuture future = Connection.getNewChannel();
+        future.addListener(f -> future.channel().writeAndFlush(commandPacket));
     }
 
     private synchronized void writeToServerWithCredentials(CommandPacket commandPacket) {

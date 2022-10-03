@@ -1,5 +1,7 @@
 package com.cloud.cloudclient.network;
 
+import io.netty.buffer.ByteBuf;
+
 import java.io.IOException;
 
 public interface TCPConnectionListener {
@@ -11,7 +13,7 @@ public interface TCPConnectionListener {
 
     void onRequestFile(String fileName);
 
-    void onReceiveFile(String fileName, long size, byte[] bytes, boolean isFirst);
+    void onReceiveFile(String fileName, long size, ByteBuf buf);
 
     void onReceiveStructure(String structure);
 
@@ -25,5 +27,5 @@ public interface TCPConnectionListener {
 
     void onRequestFileForFolder(String paths);
 
-    void onReceivedFileForFolder(String path, long size, boolean isFirst, byte[] bytes);
+    void onReceivedFileForFolder(String path, long size, ByteBuf buf);
 }

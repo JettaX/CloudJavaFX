@@ -10,6 +10,7 @@ import com.cloud.cloudclient.utils.PropertiesUtil;
 import com.cloud.cloudclient.view.utils.BackUrl;
 import com.cloud.common.entity.CloudFolder;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.netty.buffer.ByteBuf;
 import javafx.application.Platform;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -59,10 +60,10 @@ public class TCPListener implements TCPConnectionListener {
     }
 
     @Override
-    public void onReceiveFile(String fileName, long size, byte[] bytes, boolean isFirst) {
+    public void onReceiveFile(String fileName, long size, ByteBuf buf) {
         log.info("Received file" + fileName);
         try {
-            DownloadUtil.downloadFile(FileUtil.saveFile(fileName), size, isFirst, bytes);
+            DownloadUtil.downloadFile(FileUtil.saveFile(fileName), size, buf);
         } catch (IOException e) {
             log.warn(e.getMessage());
         }
@@ -115,6 +116,7 @@ public class TCPListener implements TCPConnectionListener {
     public void onTokenUpdate(String token) {
         Main.token = token;
         PropertiesUtil.setProperty("token", token);
+        PropertiesUtil.setProperty("username", Main.user.getUsername());
     }
 
     @Override
@@ -132,10 +134,10 @@ public class TCPListener implements TCPConnectionListener {
     }
 
     @Override
-    public void onReceivedFileForFolder(String path, long size, boolean isFirst, byte[] bytes) {
+    public void onReceivedFileForFolder(String path, long size, ByteBuf buf) {
         log.info("Received file for folder " + path);
         try {
-            DownloadUtil.downloadFile(FileUtil.getFile(path), size, isFirst, bytes);
+            DownloadUtil.downloadFile(FileUtil.getFile(path), size, buf);
         } catch (IOException e) {
             log.warn(e.getMessage());
         }
