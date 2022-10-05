@@ -55,3 +55,9 @@ g
 7src/main/java/com/cloud/cloudclient/utils/FileUtil.java,6\9\6953ec86a6f31c0a828733aec91279b5b3a47d3a
 N
 src/main/java/module-info.java,1\c\1c89a5491fbfda3fb050196d6a239f20200296e7
+v
+Fsrc/main/java/com/cloud/cloudclient/network/TCPConnectionListener.java,2\8\28cca29eea76a24acdbad2fa5c17d7488c7d5b08
+f
+6src/main/java/com/cloud/common/util/ServerCommand.java,4\7\47b763023dda45e3ec7067b287d7d6435472a1e2
+p
+@src/main/java/com/cloud/cloudclient/fxcontrollers/AuthToken.java,d\8\d8cb3c94b7413a7ffae1d7ea035c1a4e91a4fb6e
