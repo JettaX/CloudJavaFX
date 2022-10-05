@@ -47,8 +47,8 @@ public class CommonHandler extends SimpleChannelInboundHandler<Object> {
             } else if (command.equals(ServerCommand.AUTH_SIGN_UP.getCommand())) {
                 log.debug(command);
                 eventListener.onSignUpAttempt(ctx, commandPacket);
-            } else if (eventListener.isTokenValid(commandPacket.getUsername(), commandPacket.getToken())) {
-                log.debug("Checked token success");
+            } else if (!eventListener.isTokenValid(commandPacket.getUsername(), commandPacket.getToken())) {
+                log.debug("Token is invalid");
                 eventListener.onDisconnect(ctx, commandPacket.getUsername());
             } else if (command.equals(ServerCommand.REQUEST_STRUCTURE.getCommand())) {
                 log.debug(command);

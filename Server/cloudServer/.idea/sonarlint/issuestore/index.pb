@@ -33,3 +33,5 @@ f
 6src/main/java/com/cloud/cloud_server/dao/TokenDao.java,e\9\e922cd943c1d511c12b289b851941f34302bf904
 i
 9src/main/java/com/cloud/cloud_server/dao/UserDaoJDBC.java,5\4\54964496a086b1e4b7060bcea138a1003bcef98c
+f
+6src/main/java/com/cloud/common/util/ServerCommand.java,4\7\47b763023dda45e3ec7067b287d7d6435472a1e2
