@@ -10,8 +10,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
-
 @Slf4j
 @ChannelHandler.Sharable
 public class CommonHandler extends SimpleChannelInboundHandler<Object> {
@@ -31,40 +29,42 @@ public class CommonHandler extends SimpleChannelInboundHandler<Object> {
     }
 
     @Override
-    public void channelRead0(ChannelHandlerContext ctx, Object msg) throws IOException {
+    public void channelRead0(ChannelHandlerContext ctx, Object msg) {
         log.debug("channelRead0");
         if (msg instanceof CommandPacket commandPacket) {
-            String command = commandPacket.getCommand().getCommand();
-            if (command.equals(ServerCommand.AUTHENTICATE_SUCCESS.getCommand())) {
-                log.debug("AUTHENTICATE_SUCCESS");
-                eventListener.onAuthSuccess(commandPacket.getBody());
-            } else if (command.equals(ServerCommand.TOKEN_UPDATE.getCommand())) {
-                log.debug("TOKEN_UPDATE");
-                eventListener.onTokenUpdate(commandPacket.getToken());
-            } else if (ServerCommand.AUTHENTICATE_ATTEMPT.getCommand().equals(command)) {
-                log.debug("AUTHENTICATE_ATTEMPT");
-                eventListener.onAttemptAuth(commandPacket.getBody());
-            } else if (ServerCommand.AUTHENTICATE_FAILED.getCommand().equals(command)) {
-                log.debug("AUTHENTICATE_FAILED");
-                eventListener.onAuthFailed(commandPacket.getBody());
-            } else if (command.equals(ServerCommand.STRUCTURE.getCommand()) ||
-                    command.equals(ServerCommand.REQUEST_STRUCTURE.getCommand())) {
-                eventListener.onReceiveStructure(commandPacket.getBody());
-            } else if (command.equals(ServerCommand.REQUEST_FILE.getCommand())) {
-                eventListener.onRequestFile(commandPacket.getBody());
-            } else if (command.equals(ServerCommand.RECEIVE_FILE.getCommand()) ||
-                    command.equals(ServerCommand.RECEIVE_FILE_FOR_FOLDER.getCommand())) {
-                beforeDownload(commandPacket, ctx);
-            } else if (command.equals(ServerCommand.REQUEST_FILE_FOR_FOLDER.getCommand())) {
-                eventListener.onRequestFileForFolder(commandPacket.getBody());
+            ServerCommand command = commandPacket.getCommand();
+            log.debug(command.getCommand());
+
+            switch (command) {
+                case AUTHENTICATE_SUCCESS ->
+                        eventListener.onAuthSuccess(commandPacket.getBody());
+                case TOKEN_UPDATE ->
+                        eventListener.onTokenUpdate(commandPacket.getToken());
+                case AUTHENTICATE_ATTEMPT ->
+                        eventListener.onAttemptAuth(commandPacket.getBody());
+                case AUTHENTICATE_FAILED ->
+                        eventListener.onAuthFailed(commandPacket.getBody());
+                case STRUCTURE, REQUEST_STRUCTURE ->
+                        eventListener.onReceiveStructure(commandPacket.getBody());
+                case REQUEST_FILE ->
+                        eventListener.onRequestFile(commandPacket.getBody());
+                case RECEIVE_FILE, RECEIVE_FILE_FOR_FOLDER ->
+                        beforeDownload(commandPacket, ctx);
+                case REQUEST_FILE_FOR_FOLDER ->
+                        eventListener.onRequestFileForFolder(commandPacket.getBody());
+                default ->
+                        log.debug("Unknown command: " + command);
             }
 
         } else if (msg instanceof ByteBuf buf) {
-            String command = waitingCommand.getCommand().getCommand();
-            if (command.equals(ServerCommand.RECEIVE_FILE.getCommand())) {
-                eventListener.onReceiveFile(waitingFile.getFileName(), waitingFile.getFileSize(), buf);
-            } else if (command.equals(ServerCommand.RECEIVE_FILE_FOR_FOLDER.getCommand())) {
-                eventListener.onReceivedFileForFolder(waitingFile.getFilePath(), waitingFile.getFileSize(), buf);
+            ServerCommand command = waitingCommand.getCommand();
+            switch (command) {
+                case RECEIVE_FILE ->
+                        eventListener.onReceiveFile(waitingFile.getFileName(), waitingFile.getFileSize(), buf);
+                case RECEIVE_FILE_FOR_FOLDER ->
+                        eventListener.onReceivedFileForFolder(waitingFile.getFilePath(), waitingFile.getFileSize(), buf);
+                default ->
+                        log.debug("Unknown command: " + command);
             }
         }
     }

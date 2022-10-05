@@ -12,8 +12,7 @@ import java.io.Serializable;
 public class FilePacket implements Serializable {
     String fileName;
     String filePath;
+    String newFileName;
+    String newFilePath;
     long fileSize;
-    boolean isFirst;
-    boolean isLast;
-    byte[] fileContent;
 }

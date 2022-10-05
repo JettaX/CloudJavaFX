@@ -5,10 +5,6 @@ v
 Fsrc/main/java/com/cloud/cloudclient/fxcontrollers/ErrorController.java,c\1\c1bdf120819069e1cf58d351ee50c33dbbd49536
 d
 4src/main/java/com/cloud/cloudclient/dao/UserDAO.java,1\c\1c1951478f953d6f4996218d4a51e4cf5cce09a2
-h
-8src/main/java/com/cloud/common/entity/CommandPacket.java,f\a\fa9510d44acaa6760d64ee1e6721e7abe4fe3027
-e
-5src/main/java/com/cloud/common/entity/FilePacket.java,d\f\dfccd9c1453c43a60d02276f4c556f3c87fd86f2
 k
 ;src/main/java/com/cloud/cloudclient/view/utils/BackUrl.java,7\7\779475270faada770373bb1e3a9906c9f5794dbd
 h
@@ -21,8 +17,6 @@ w
 Gsrc/main/java/com/cloud/cloudclient/fxcontrollers/SignupController.java,d\8\d8e5682438754fb74b0d4804bbb2c367afea06e8
 m
 =src/main/java/com/cloud/cloudclient/utils/JdbcConnection.java,0\0\00f054dfc032d86487cb9ad8d6a4ecd5017adeb6
-h
-8src/main/java/com/cloud/cloudclient/dao/UserDaoJDBC.java,c\7\c7de54831ee7dca24e8e16b8f1796c8c23de4cfb
 k
 ;src/main/java/com/cloud/cloudclient/utils/FilesChecker.java,0\e\0eb0c359e2623a16123955ca7619bad6dc567389
 z

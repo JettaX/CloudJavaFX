@@ -62,12 +62,12 @@ public class TCPConnection {
         FilePacket filePacket = FilePacket.builder()
                 .fileName(oldName)
                 .filePath(path)
+                .newFileName(newName)
                 .build();
 
         CommandPacket commandPacket = CommandPacket.builder()
                 .command(ServerCommand.RENAME_FILE)
                 .object(filePacket)
-                .body(newName)
                 .build();
 
         writeToServerWithCredentials(commandPacket);
