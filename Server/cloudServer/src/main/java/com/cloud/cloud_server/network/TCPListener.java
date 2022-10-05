@@ -206,7 +206,7 @@ public class TCPListener implements TCPConnectionListener {
     @Override
     public void onRenameFile(ChannelHandlerContext ctx, CommandPacket commandPacket) {
         FilePacket filePacket = (FilePacket) commandPacket.getObject();
-        FileUtil.renameFile(filePacket.getFilePath(), filePacket.getFileName(), commandPacket.getBody());
+        FileUtil.renameFile(filePacket.getFilePath(), filePacket.getFileName(), filePacket.getNewFileName());
     }
 
     private void writeToFile(File file, ByteBuf buf) throws IOException {

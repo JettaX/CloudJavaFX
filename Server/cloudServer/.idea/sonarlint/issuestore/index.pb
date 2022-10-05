@@ -13,10 +13,6 @@ m
 =src/main/java/com/cloud/cloud_server/util/PropertiesUtil.java,d\9\d9f9fd02ec005440cc06cba35663999bb3b7a8a8
 a
 1src/main/java/com/cloud/common/util/SHAUtils.java,e\5\e509a1b098e0f00c2440b407a5ff3671eb0bc1c7
-e
-5src/main/java/com/cloud/common/entity/FilePacket.java,d\f\dfccd9c1453c43a60d02276f4c556f3c87fd86f2
-h
-8src/main/java/com/cloud/common/entity/CommandPacket.java,f\a\fa9510d44acaa6760d64ee1e6721e7abe4fe3027
 k
 ;src/main/java/com/cloud/cloud_server/dao/UserSecureDAO.java,c\8\c8746bb34c214db5764f8c9b213a4e36531f9ec2
 e
@@ -33,5 +29,3 @@ f
 6src/main/java/com/cloud/cloud_server/dao/TokenDao.java,e\9\e922cd943c1d511c12b289b851941f34302bf904
 i
 9src/main/java/com/cloud/cloud_server/dao/UserDaoJDBC.java,5\4\54964496a086b1e4b7060bcea138a1003bcef98c
-f
-6src/main/java/com/cloud/common/util/ServerCommand.java,4\7\47b763023dda45e3ec7067b287d7d6435472a1e2

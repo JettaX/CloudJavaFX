@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @ChannelHandler.Sharable
 public class CommonHandler extends SimpleChannelInboundHandler<Object> {
 
-    private TCPListener eventListener;
+    private final TCPListener eventListener;
     private CommandPacket waitingCommand;
     private FilePacket waitingFile;
 
@@ -34,65 +34,66 @@ public class CommonHandler extends SimpleChannelInboundHandler<Object> {
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, Object msg) {
         log.debug("ChanelRead");
         if (msg instanceof CommandPacket commandPacket) {
-            String command = commandPacket.getCommand().getCommand();
-            if (command.equals(ServerCommand.AUTH_WITH_PASSWORD.getCommand())) {
-                log.debug(command);
-                eventListener.onAttemptAuthWithLoginPassword(ctx, commandPacket.getUsername(), commandPacket.getBody());
-            } else if (command.equals(ServerCommand.AUTH_WITH_TOKEN.getCommand())) {
-                log.debug(command);
-                eventListener.onAttemptAuthWithToken(ctx, commandPacket);
-            } else if (command.equals(ServerCommand.AUTH_SIGN_UP.getCommand())) {
-                log.debug(command);
-                eventListener.onSignUpAttempt(ctx, commandPacket);
-            } else if (!eventListener.isTokenValid(commandPacket.getUsername(), commandPacket.getToken())) {
-                log.debug("Token is invalid");
-                eventListener.onDisconnect(ctx, commandPacket.getUsername());
-            } else if (command.equals(ServerCommand.REQUEST_STRUCTURE.getCommand())) {
-                log.debug(command);
-                eventListener.onRequestStructure(ctx, commandPacket.getUsername());
-            } else if (command.equals(ServerCommand.REQUEST_FILE.getCommand())) {
-                log.debug(command);
-                eventListener.onRequestFile(ctx, commandPacket.getBody());
-            } else if (command.equals(ServerCommand.RECEIVE_FILE.getCommand()) ||
-                    command.equals(ServerCommand.RECEIVE_FILE_FOR_FOLDER.getCommand())) {
-                log.debug(command);
-                beforeDownload(commandPacket, ctx);
-            } else if (command.equals(ServerCommand.DELETE_FILE.getCommand())) {
-                log.debug(command);
-                eventListener.onDeletedFile(ctx, commandPacket.getBody());
-                eventListener.onRequestStructure(ctx, commandPacket.getUsername());
-            } else if (command.equals(ServerCommand.RECEIVE_FOLDER.getCommand())) {
-                log.debug(command);
-                eventListener.onReceivedFolder(ctx, commandPacket.getBody(), commandPacket.getUsername());
-            } else if (command.equals(ServerCommand.REQUEST_FILE_FOR_FOLDER.getCommand())) {
-                log.debug(command);
-                String filePath = commandPacket.getBody();
-                eventListener.onRequestFileForFolder(ctx, filePath);
-            } else if (command.equals(ServerCommand.CREATE_FOLDER.getCommand())) {
-                log.debug(command);
-                eventListener.onCreateFolder(ctx, commandPacket);
-            } else if (command.equals(ServerCommand.RENAME_FILE.getCommand())) {
-                log.debug(command);
-                eventListener.onRenameFile(ctx, commandPacket);
+            ServerCommand command = commandPacket.getCommand();
+            log.debug(command.getCommand());
+
+            switch (command) {
+                case AUTH_WITH_PASSWORD -> eventListener.onAttemptAuthWithLoginPassword(ctx,
+                        commandPacket.getUsername(), commandPacket.getBody());
+                case AUTH_WITH_TOKEN ->
+                        eventListener.onAttemptAuthWithToken(ctx, commandPacket);
+                case AUTH_SIGN_UP ->
+                        eventListener.onSignUpAttempt(ctx, commandPacket);
+                case REQUEST_STRUCTURE ->
+                        eventListener.onRequestStructure(ctx, commandPacket.getUsername());
+                case REQUEST_FILE ->
+                        eventListener.onRequestFile(ctx, commandPacket.getBody());
+                case RECEIVE_FILE, RECEIVE_FILE_FOR_FOLDER ->
+                        beforeDownload(commandPacket, ctx);
+                case DELETE_FILE -> {
+                    eventListener.onDeletedFile(ctx, commandPacket.getBody());
+                    eventListener.onRequestStructure(ctx, commandPacket.getUsername());
+                }
+                case RECEIVE_FOLDER ->
+                        eventListener.onReceivedFolder(ctx, commandPacket.getBody(), commandPacket.getUsername());
+                case REQUEST_FILE_FOR_FOLDER ->
+                        eventListener.onRequestFileForFolder(ctx, commandPacket.getBody());
+                case CREATE_FOLDER ->
+                        eventListener.onCreateFolder(ctx, commandPacket);
+                case RENAME_FILE ->
+                        eventListener.onRenameFile(ctx, commandPacket);
+                default ->
+                        log.debug("Unknown command: " + command);
             }
 
         } else if (msg instanceof ByteBuf buf) {
-            String command = waitingCommand.getCommand().getCommand();
-            if (command.equals(ServerCommand.RECEIVE_FILE.getCommand())) {
-                eventListener.onReceivingFile(ctx, waitingCommand, waitingFile, buf);
-            } else if (command.equals(ServerCommand.RECEIVE_FILE_FOR_FOLDER.getCommand())) {
-                eventListener.onReceivedFileForFolder(ctx, waitingFile, buf);
+            ServerCommand command = waitingCommand.getCommand();
+            switch (command) {
+                case RECEIVE_FILE ->
+                        eventListener.onReceivingFile(ctx, waitingCommand, waitingFile, buf);
+                case RECEIVE_FILE_FOR_FOLDER ->
+                        eventListener.onReceivedFileForFolder(ctx, waitingFile, buf);
+                default ->
+                        log.debug("Unknown command: " + command);
             }
         }
     }
 
     private void beforeDownload(CommandPacket commandPacket, ChannelHandlerContext ctx) {
+        checkToken(ctx, commandPacket);
         waitingFile = (FilePacket) commandPacket.getObject();
         waitingCommand = commandPacket;
         ctx.channel().pipeline().remove("decoder");
+    }
+
+    private void checkToken(ChannelHandlerContext ctx, CommandPacket commandPacket) {
+        if (!eventListener.isTokenValid(commandPacket.getUsername(), commandPacket.getToken())) {
+            log.debug("Token is invalid");
+            eventListener.onDisconnect(ctx, commandPacket.getUsername());
+        }
     }
 
     @Override
