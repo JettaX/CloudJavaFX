@@ -19,7 +19,7 @@ import java.nio.file.Files;
 import java.util.Optional;
 
 @Slf4j
-public class TCPConnection {
+public class TCPConnection implements Connection {
     private final TCPConnectionListener eventListener;
     @Setter
     private Optional<Channel> channel;
@@ -29,11 +29,13 @@ public class TCPConnection {
         new Thread(() -> new ClientNetty().start(this)).start();
     }
 
+    @Override
     public synchronized void sendLogin(String login, String password) {
         log.debug("Send login: {}", login);
         auth(ServerCommand.AUTH_WITH_PASSWORD, login, password);
     }
 
+    @Override
     public synchronized void sendCredentialsForRegistration(String login, String password) {
         log.debug("Send login: {}", login);
         auth(ServerCommand.AUTH_SIGN_UP, login, password);
@@ -48,6 +50,7 @@ public class TCPConnection {
         writeToServer(commandPacket);
     }
 
+    @Override
     public synchronized void deleteFile(String filePathToServer) {
         log.debug("Delete file: {}", filePathToServer);
         CommandPacket commandPacket = CommandPacket.builder()
@@ -57,6 +60,7 @@ public class TCPConnection {
         writeToServerWithCredentials(commandPacket);
     }
 
+    @Override
     public synchronized void renameFile(String path, String oldName, String newName) {
         log.debug("Rename file: {}", oldName);
         FilePacket filePacket = FilePacket.builder()
@@ -73,6 +77,7 @@ public class TCPConnection {
         writeToServerWithCredentials(commandPacket);
     }
 
+    @Override
     public synchronized void authWithToken(String token, String username) {
         log.debug("Auth with token");
         CommandPacket commandPacket = CommandPacket.builder()
@@ -83,6 +88,7 @@ public class TCPConnection {
         writeToServer(commandPacket);
     }
 
+    @Override
     public synchronized void requestFile(String path) {
         log.debug("Request file: {}", path);
         CommandPacket commandPacket = CommandPacket.builder()
@@ -92,6 +98,7 @@ public class TCPConnection {
         writeToServerWithCredentialsAndNewChannel(commandPacket);
     }
 
+    @Override
     public synchronized void requestStructure() {
         log.debug("Request structure");
         CommandPacket commandPacket = CommandPacket.builder()
@@ -100,6 +107,7 @@ public class TCPConnection {
         writeToServerWithCredentials(commandPacket);
     }
 
+    @Override
     public synchronized void sendFile(File file) {
         try {
             log.debug("Send file: {}", file.getName());
@@ -121,6 +129,7 @@ public class TCPConnection {
         }
     }
 
+    @Override
     public synchronized void sendFileForFolder(File file, String pathForServer) {
         try {
             log.debug("Send file for folder: {}", file.getName());
@@ -144,6 +153,7 @@ public class TCPConnection {
         }
     }
 
+    @Override
     public synchronized void sendFolder(CloudFolder cloudFolder) {
         try {
             log.debug("Send folder: {}", cloudFolder.getName());
@@ -158,6 +168,7 @@ public class TCPConnection {
         }
     }
 
+    @Override
     public void requestFileForFolder(String pathServer, String pathClient) {
         log.debug("Request file for folder: {}", pathServer);
         CommandPacket commandPacket = CommandPacket.builder()
@@ -170,7 +181,7 @@ public class TCPConnection {
     private void writeToServerWithCredentialsAndNewChannel(CommandPacket commandPacket) {
         commandPacket.setToken(Main.token);
         commandPacket.setUsername(Main.user.getUsername());
-        ChannelFuture future = Connection.getNewChannel();
+        ChannelFuture future = ConnectionUtil.getNewChannel();
         future.addListener(f -> future.channel().writeAndFlush(commandPacket));
     }
 
@@ -180,6 +191,7 @@ public class TCPConnection {
         writeToServer(commandPacket);
     }
 
+    @Override
     public synchronized void createFolder(String path) {
         log.debug("Request for create folder: {}", path);
         CommandPacket commandPacket = CommandPacket.builder()
@@ -198,7 +210,7 @@ public class TCPConnection {
         }
     }
 
-
+    @Override
     public synchronized void disconnect() {
         log.debug("Disconnect");
         channel.orElseThrow().close();

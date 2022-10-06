@@ -1,8 +1,6 @@
 
 ?
 cloudClient.iml,0\f\0fae1722ab1091e9746febb9a29283714afdef02
-v
-Fsrc/main/java/com/cloud/cloudclient/fxcontrollers/ErrorController.java,c\1\c1bdf120819069e1cf58d351ee50c33dbbd49536
 d
 4src/main/java/com/cloud/cloudclient/dao/UserDAO.java,1\c\1c1951478f953d6f4996218d4a51e4cf5cce09a2
 k
@@ -13,14 +11,8 @@ l
 <src/main/java/com/cloud/cloudclient/view/utils/TypeIcon.java,b\8\b8384a779fc8c6c52368bea5309050de0c4065a3
 d
 4src/main/java/com/cloud/cloudclient/entity/User.java,9\6\96ff8ec2c4aaae8b981aeff609adf41eedd99cce
-w
-Gsrc/main/java/com/cloud/cloudclient/fxcontrollers/SignupController.java,d\8\d8e5682438754fb74b0d4804bbb2c367afea06e8
 m
 =src/main/java/com/cloud/cloudclient/utils/JdbcConnection.java,0\0\00f054dfc032d86487cb9ad8d6a4ecd5017adeb6
-k
-;src/main/java/com/cloud/cloudclient/utils/FilesChecker.java,0\e\0eb0c359e2623a16123955ca7619bad6dc567389
-z
-Jsrc/main/java/com/cloud/cloudclient/fxcontrollers/DownloadsController.java,6\a\6a715227e37294b165d37c62772c30e0b9cfb983
 7
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
 n
@@ -37,21 +29,13 @@ j
 :src/main/java/com/cloud/cloudclient/view/ActiveScreen.java,8\7\87a16ea350f4b86b4dadd118288b9217b11cf32b
 h
 8src/main/java/com/cloud/cloudclient/view/TypeOfLoad.java,e\6\e61bcfe3f36bec731a92fcdcc17f860f2b866df6
-h
-8src/main/java/com/cloud/cloudclient/view/Indicators.java,d\a\da1cd2556a03f13f9509b6e875d8498ea8276f17
 g
 7src/main/java/com/cloud/cloudclient/view/Indicator.java,1\a\1ae299fafea96232cc063b1677002bd3956aa5c1
-u
-Esrc/main/java/com/cloud/cloudclient/fxcontrollers/HomeController.java,3\0\30240e61f34bd4242436e56267ce3da94577fb1e
 d
 4src/main/java/com/cloud/common/entity/CloudFile.java,6\9\69d81990797e559889681c1d6f480f8194b95750
-g
-7src/main/java/com/cloud/cloudclient/utils/FileUtil.java,6\9\6953ec86a6f31c0a828733aec91279b5b3a47d3a
 N
 src/main/java/module-info.java,1\c\1c89a5491fbfda3fb050196d6a239f20200296e7
 v
 Fsrc/main/java/com/cloud/cloudclient/network/TCPConnectionListener.java,2\8\28cca29eea76a24acdbad2fa5c17d7488c7d5b08
 f
 6src/main/java/com/cloud/common/util/ServerCommand.java,4\7\47b763023dda45e3ec7067b287d7d6435472a1e2
-p
-@src/main/java/com/cloud/cloudclient/fxcontrollers/AuthToken.java,d\8\d8cb3c94b7413a7ffae1d7ea035c1a4e91a4fb6e

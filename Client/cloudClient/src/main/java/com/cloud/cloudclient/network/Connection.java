@@ -1,67 +1,34 @@
 package com.cloud.cloudclient.network;
 
-import io.netty.channel.ChannelFuture;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
+import com.cloud.common.entity.CloudFolder;
 
-import java.io.IOException;
+import java.io.File;
 
-@Slf4j
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class Connection {
+public interface Connection {
 
-    private static TCPConnection connection = null;
-    @Setter
-    private static ChannelFuture DownloadConnection = null;
-    private static Thread downloadThread = null;
+    void sendLogin(String login, String password);
 
-    public static void addIfNotExists(TCPConnectionListener listener) throws IOException {
-        if (connection == null) {
-            log.debug("Connection was add");
-            connection = new TCPConnection(listener);
-        }
-    }
+    void sendCredentialsForRegistration(String login, String password);
 
-    public static TCPConnection get() {
-        return connection;
-    }
+    void deleteFile(String filePathToServer);
 
-    public static ChannelFuture getNewChannel() {
-        downloadThread = new Thread(() -> {
-            try {
-                ClientNetty.getNewChannel();
-            } catch (Exception e) {
-                log.debug("Thread interrupted");
-            }
-        });
-        downloadThread.start();
-        int count = 10;
-        while (DownloadConnection == null && count-- > 0) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return DownloadConnection;
-    }
+    void renameFile(String path, String oldName, String newName);
 
-    public static void closeDownloadConnection() {
-        DownloadConnection.channel().disconnect();
-        DownloadConnection.channel().close();
-        DownloadConnection = null;
-        downloadThread.interrupt();
-        downloadThread = null;
-    }
+    void authWithToken(String token, String username);
 
-    public static void remove() {
-        connection.disconnect();
-        connection = null;
-    }
+    void requestFile(String path);
 
-    public static boolean isConnected() {
-        return connection != null;
-    }
+    void requestStructure();
+
+    void sendFile(File file);
+
+    void sendFileForFolder(File file, String pathForServer);
+
+    void sendFolder(CloudFolder cloudFolder);
+
+    void requestFileForFolder(String pathServer, String pathClient);
+
+    void createFolder(String path);
+
+    void disconnect();
 }

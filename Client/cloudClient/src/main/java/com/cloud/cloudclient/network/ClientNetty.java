@@ -63,12 +63,12 @@ public class ClientNetty {
         Bootstrap boot = bootstrap.clone();
         try {
             ChannelFuture f = boot.connect().sync();
-            Connection.setDownloadConnection(f);
+            ConnectionUtil.setDownloadConnection(f);
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             log.debug("Connection download interrupted");
         } finally {
-            Connection.closeDownloadConnection();
+            ConnectionUtil.closeDownloadConnection();
         }
     }
 

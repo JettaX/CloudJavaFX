@@ -2,7 +2,7 @@ package com.cloud.cloudclient.fxcontrollers;
 
 
 import com.cloud.cloudclient.Main;
-import com.cloud.cloudclient.network.Connection;
+import com.cloud.cloudclient.network.ConnectionWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -22,6 +22,11 @@ public class LoginController {
     public Button signUpButton;
     @FXML
     public VBox authWrapper;
+    private ConnectionWrapper connection;
+
+    public void initialize() {
+        connection = ConnectionWrapper.getINSTANCE();
+    }
 
     public void loginButtonAction() {
         String login = inputLogin.getText();
@@ -30,7 +35,7 @@ public class LoginController {
             return;
         }
         try {
-            Connection.get().sendLogin(login, password);
+            connection.sendLogin(login, password);
         } catch (NullPointerException e) {
             log.warn("Server is not connected");
         }

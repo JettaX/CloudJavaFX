@@ -1,7 +1,7 @@
 package com.cloud.cloudclient.fxcontrollers;
 
 import com.cloud.cloudclient.Main;
-import com.cloud.cloudclient.network.Connection;
+import com.cloud.cloudclient.network.ConnectionWrapper;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -21,8 +21,10 @@ public class SignupController {
     public PasswordField inputPasswordRepeated;
     public Button loginButton;
     public Button buttonBack;
+    private ConnectionWrapper connection;
 
     public void initialize() {
+        connection = ConnectionWrapper.getINSTANCE();
         graphicsApply(buttonBack, "/images/icon/arrow-left.png", 30, 30);
     }
 
@@ -35,7 +37,7 @@ public class SignupController {
                 !inputPassword.getText().isBlank() &&
                 !inputPasswordRepeated.getText().isBlank() &&
                 inputPassword.getText().equals(inputPasswordRepeated.getText())) {
-            Connection.get().sendCredentialsForRegistration(inputLogin.getText(), inputPassword.getText());
+            connection.sendCredentialsForRegistration(inputLogin.getText(), inputPassword.getText());
         }
     }
 

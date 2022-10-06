@@ -32,11 +32,11 @@ public class DownloadUtil {
     public static void uploadFile(CommandPacket commandPacket, FilePacket filePacket, File file, Channel channel) throws IOException {
         String name = filePacket.getFileName();
         commandPacket.setObject(filePacket);
-        ChannelFuture future = Connection.getNewChannel();
+        ChannelFuture future = ConnectionUtil.getNewChannel();
         future.addListener(f -> {
             future.channel().writeAndFlush(commandPacket);
             future.channel().writeAndFlush(new ChunkedStream(new FileInputStream(file), 2048)).addListener(ff ->
-                    Connection.closeDownloadConnection());
+                    ConnectionUtil.closeDownloadConnection());
             /*Indicators.downloading(name, total, (int) progress, TypeOfLoad.UPLOAD);*/
         });
     }

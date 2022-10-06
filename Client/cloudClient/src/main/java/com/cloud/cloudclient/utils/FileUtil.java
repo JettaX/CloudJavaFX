@@ -4,7 +4,7 @@ package com.cloud.cloudclient.utils;
 import com.cloud.cloudclient.Main;
 import com.cloud.common.entity.CloudFile;
 import com.cloud.common.entity.CloudFolder;
-import com.cloud.cloudclient.network.Connection;
+import com.cloud.cloudclient.network.ConnectionUtil;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -90,7 +90,7 @@ public class FileUtil {
                     for (CloudFile childCloudFile : cloudFolder.getCloudFiles()) {
                         saveFileByPath(childCloudFile.getName(), newFile.getAbsolutePath());
                         File file1 = new File(newFile, childCloudFile.getName());
-                        Connection.get().requestFileForFolder(childCloudFile.getPath(), file1.getPath());
+                        ConnectionUtil.get().requestFileForFolder(childCloudFile.getPath(), file1.getPath());
                     }
                 }
             } catch (IOException e) {

@@ -44,14 +44,14 @@ public class TCPListener implements TCPConnectionListener {
 
     @Override
     public void onDisconnect(String login) {
-        Connection.remove();
+        ConnectionUtil.remove();
         log.info("Disconnected from server");
     }
 
     @Override
     public void onException(Exception e) {
         log.warn(e.getMessage());
-        Connection.remove();
+        ConnectionUtil.remove();
     }
 
     @Override
@@ -127,7 +127,7 @@ public class TCPListener implements TCPConnectionListener {
             String filePathClient = path[0];
             String filePathServer = path[1];
             File file = FileUtil.getFile(filePathClient);
-            Connection.get().sendFileForFolder(file, filePathServer);
+            ConnectionUtil.get().sendFileForFolder(file, filePathServer);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -145,7 +145,7 @@ public class TCPListener implements TCPConnectionListener {
 
     private void createConnections() {
         try {
-            Connection.addIfNotExists(this);
+            ConnectionUtil.addIfNotExists(this);
         } catch (IOException e) {
             log.warn("Error");
         }
