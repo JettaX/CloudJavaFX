@@ -8,8 +8,6 @@ f
 k
 ;src/main/java/com/cloud/cloud_server/entity/UserSecure.java,b\5\b5d49b7625e30b651517e1b06802d7c9a929b851
 m
-=src/main/java/com/cloud/cloud_server/util/JdbcConnection.java,3\b\3b4af834af55f61833ff915b3cd5cc8eec08e18f
-m
 =src/main/java/com/cloud/cloud_server/util/PropertiesUtil.java,d\9\d9f9fd02ec005440cc06cba35663999bb3b7a8a8
 a
 1src/main/java/com/cloud/common/util/SHAUtils.java,e\5\e509a1b098e0f00c2440b407a5ff3671eb0bc1c7

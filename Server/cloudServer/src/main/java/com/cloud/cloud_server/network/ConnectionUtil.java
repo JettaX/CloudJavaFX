@@ -6,7 +6,6 @@ import com.cloud.common.entity.CommandPacket;
 import com.cloud.common.entity.FilePacket;
 import com.cloud.common.util.ServerCommand;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.stream.ChunkedStream;
 import lombok.extern.slf4j.Slf4j;
@@ -87,7 +86,7 @@ public class ConnectionUtil {
 
             sendFile(file, commandPacket, filePacket, ctx);
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            log.error("Error sending file: {}", filePathClient, e);
         }
     }
 
@@ -96,17 +95,5 @@ public class ConnectionUtil {
         ctx.writeAndFlush(commandPacket);
         ctx.writeAndFlush(new ChunkedStream(new FileInputStream(file), 2048)).addListener(future ->
                 ctx.channel().close());
-    }
-
-    private void checkAvailable(Channel channel) throws InterruptedException {
-        int count = 0;
-        while (!channel.isWritable()) {
-            log.debug("Wait channel");
-            if (count > 30) {
-                throw new RuntimeException();
-            }
-            Thread.sleep(50);
-            count++;
-        }
     }
 }

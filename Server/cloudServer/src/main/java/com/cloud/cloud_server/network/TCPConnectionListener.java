@@ -17,7 +17,6 @@ public interface TCPConnectionListener {
     void onAuthSuccess(ChannelHandlerContext ctx, String login);
     void onAuthFailed(ChannelHandlerContext ctx, String message);
     void onReceivingFile(ChannelHandlerContext ctx, CommandPacket commandPacket, FilePacket filePacket, ByteBuf buf);
-    void onReceivedFile(ChannelHandlerContext ctx, String userName);
     void onRequestStructure(ChannelHandlerContext ctx, String userName);
     void onDeletedFile(ChannelHandlerContext ctx, String filePath);
     void onReceivedFolder(ChannelHandlerContext ctx, String folder, String login);
@@ -27,4 +26,6 @@ public interface TCPConnectionListener {
     void onSignUpAttempt(ChannelHandlerContext ctx, CommandPacket commandPacket);
     void onCreateFolder(ChannelHandlerContext ctx, CommandPacket commandPacket);
     void onRenameFile(ChannelHandlerContext ctx, CommandPacket commandPacket);
+    void onCopyFile(ChannelHandlerContext ctx, FilePacket filePacket);
+    void onMoveFile(ChannelHandlerContext ctx, FilePacket filePacket);
 }

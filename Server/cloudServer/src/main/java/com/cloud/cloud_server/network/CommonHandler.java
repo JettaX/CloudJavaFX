@@ -43,41 +43,37 @@ public class CommonHandler extends SimpleChannelInboundHandler<Object> {
             switch (command) {
                 case AUTH_WITH_PASSWORD -> eventListener.onAttemptAuthWithLoginPassword(ctx,
                         commandPacket.getUsername(), commandPacket.getBody());
-                case AUTH_WITH_TOKEN ->
-                        eventListener.onAttemptAuthWithToken(ctx, commandPacket);
-                case AUTH_SIGN_UP ->
-                        eventListener.onSignUpAttempt(ctx, commandPacket);
-                case REQUEST_STRUCTURE ->
-                        eventListener.onRequestStructure(ctx, commandPacket.getUsername());
-                case REQUEST_FILE ->
-                        eventListener.onRequestFile(ctx, commandPacket.getBody());
-                case RECEIVE_FILE, RECEIVE_FILE_FOR_FOLDER ->
-                        beforeDownload(commandPacket, ctx);
+                case AUTH_WITH_TOKEN -> eventListener.onAttemptAuthWithToken(ctx, commandPacket);
+                case AUTH_SIGN_UP -> eventListener.onSignUpAttempt(ctx, commandPacket);
+                case REQUEST_STRUCTURE -> eventListener.onRequestStructure(ctx, commandPacket.getUsername());
+                case REQUEST_FILE -> eventListener.onRequestFile(ctx, commandPacket.getBody());
+                case RECEIVE_FILE, RECEIVE_FILE_FOR_FOLDER -> beforeDownload(commandPacket, ctx);
                 case DELETE_FILE -> {
                     eventListener.onDeletedFile(ctx, commandPacket.getBody());
                     eventListener.onRequestStructure(ctx, commandPacket.getUsername());
                 }
                 case RECEIVE_FOLDER ->
                         eventListener.onReceivedFolder(ctx, commandPacket.getBody(), commandPacket.getUsername());
-                case REQUEST_FILE_FOR_FOLDER ->
-                        eventListener.onRequestFileForFolder(ctx, commandPacket.getBody());
-                case CREATE_FOLDER ->
-                        eventListener.onCreateFolder(ctx, commandPacket);
-                case RENAME_FILE ->
-                        eventListener.onRenameFile(ctx, commandPacket);
-                default ->
-                        log.debug("Unknown command: " + command);
+                case REQUEST_FILE_FOR_FOLDER -> eventListener.onRequestFileForFolder(ctx, commandPacket.getBody());
+                case CREATE_FOLDER -> eventListener.onCreateFolder(ctx, commandPacket);
+                case RENAME_FILE -> eventListener.onRenameFile(ctx, commandPacket);
+                case COPY_FILE -> {
+                    eventListener.onCopyFile(ctx, (FilePacket) commandPacket.getObject());
+                    eventListener.onRequestStructure(ctx, commandPacket.getUsername());
+                }
+                case MOVE_FILE -> {
+                    eventListener.onMoveFile(ctx, (FilePacket) commandPacket.getObject());
+                    eventListener.onRequestStructure(ctx, commandPacket.getUsername());
+                }
+                default -> log.debug("Unknown command: " + command);
             }
 
         } else if (msg instanceof ByteBuf buf) {
             ServerCommand command = waitingCommand.getCommand();
             switch (command) {
-                case RECEIVE_FILE ->
-                        eventListener.onReceivingFile(ctx, waitingCommand, waitingFile, buf);
-                case RECEIVE_FILE_FOR_FOLDER ->
-                        eventListener.onReceivedFileForFolder(ctx, waitingFile, buf);
-                default ->
-                        log.debug("Unknown command: " + command);
+                case RECEIVE_FILE -> eventListener.onReceivingFile(ctx, waitingCommand, waitingFile, buf);
+                case RECEIVE_FILE_FOR_FOLDER -> eventListener.onReceivedFileForFolder(ctx, waitingFile, buf);
+                default -> log.debug("Unknown command: " + command);
             }
         }
     }

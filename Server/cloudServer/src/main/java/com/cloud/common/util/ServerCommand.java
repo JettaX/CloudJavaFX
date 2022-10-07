@@ -21,6 +21,8 @@ public enum ServerCommand implements Serializable {
     REQUEST_STRUCTURE("/request_structure"),
     RENAME_FILE("/rename_file"),
     FILE_SENT("/file_sent"),
+    COPY_FILE("/copy_file"),
+    MOVE_FILE("/move_file"),
     DELETE_FILE("/delete_file");
     private String command;
 

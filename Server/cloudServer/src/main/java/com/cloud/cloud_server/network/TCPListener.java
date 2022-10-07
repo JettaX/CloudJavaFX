@@ -129,12 +129,6 @@ public class TCPListener implements TCPConnectionListener {
     }
 
     @Override
-    public void onReceivedFile(ChannelHandlerContext ctx, String userName) {
-        log.debug("Received file {}", userName);
-        connectionUtil.sendStructure(ctx, FileUtil.getFolder(userName));
-    }
-
-    @Override
     public void onRequestStructure(ChannelHandlerContext ctx, String userName) {
         log.debug("Request structure {}", userName);
         connectionUtil.sendStructure(ctx, FileUtil.getFolder(userName));
@@ -207,6 +201,24 @@ public class TCPListener implements TCPConnectionListener {
     public void onRenameFile(ChannelHandlerContext ctx, CommandPacket commandPacket) {
         FilePacket filePacket = (FilePacket) commandPacket.getObject();
         FileUtil.renameFile(filePacket.getFilePath(), filePacket.getFileName(), filePacket.getNewFileName());
+    }
+
+    @Override
+    public void onCopyFile(ChannelHandlerContext ctx, FilePacket filePacket) {
+        try {
+            FileUtil.copyFile(filePacket.getFileName(), filePacket.getFilePath(), filePacket.getNewFilePath());
+        } catch (IOException e) {
+            log.error("Copy file failed", e);
+        }
+    }
+
+    @Override
+    public void onMoveFile(ChannelHandlerContext ctx, FilePacket filePacket) {
+        try {
+            FileUtil.moveFile(filePacket.getFileName(), filePacket.getFilePath(), filePacket.getNewFilePath());
+        } catch (IOException e) {
+            log.error("Move file failed", e);
+        }
     }
 
     private void writeToFile(File file, ByteBuf buf) throws IOException {

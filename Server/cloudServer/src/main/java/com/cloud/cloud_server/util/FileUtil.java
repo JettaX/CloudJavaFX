@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -99,6 +101,21 @@ public class FileUtil {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public static void moveFile(String fileName, String filePath, String folderPath) throws IOException {
+        File file = new File(folderPath, fileName);
+        Files.move(Path.of(filePath), Path.of(file.getAbsolutePath()), StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    public static void copyFile(String fileName, String filePath, String folderPath) throws IOException {
+        File file = new File(folderPath, fileName);
+        Files.copy(Path.of(filePath), Path.of(file.getAbsolutePath()), StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    public static boolean isExists(String path) {
+        File file = new File(path);
+        return file.exists();
     }
 
     public static CloudFolder getFolder(String username) {
