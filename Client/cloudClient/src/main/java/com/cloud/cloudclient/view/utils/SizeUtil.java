@@ -10,10 +10,10 @@ public class SizeUtil {
         double size = sizeOfBytes;
         String prefix = "bytes";
         if (sizeOfBytes >= 1000000) {
-            size = Math.round(sizeOfBytes / 1000000D);
+            size = Math.round(sizeOfBytes / 1024D / 1024D);
             prefix = "mb";
         } else if (sizeOfBytes >= 1000) {
-            size = Math.round(sizeOfBytes / 1000D);
+            size = Math.round(sizeOfBytes / 1024D);
             prefix = "kb";
         }
         return String.valueOf(size).concat(" ").concat(prefix);

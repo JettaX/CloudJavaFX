@@ -1,5 +1,6 @@
 package com.cloud.cloudclient.network;
 
+import com.cloud.cloudclient.entity.TransferFile;
 import com.cloud.common.entity.CloudFolder;
 
 import java.io.File;
@@ -29,6 +30,10 @@ public interface Connection {
     void requestFileForFolder(String pathServer, String pathClient);
 
     void createFolder(String path);
+
+    void moveFile(TransferFile transferFile, String folderPath);
+
+    void copyFile(TransferFile transferFile, String folderPath);
 
     void disconnect();
 }

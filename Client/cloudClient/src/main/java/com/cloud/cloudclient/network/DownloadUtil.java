@@ -6,7 +6,6 @@ import com.cloud.cloudclient.view.TypeOfLoad;
 import com.cloud.common.entity.CommandPacket;
 import com.cloud.common.entity.FilePacket;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.handler.stream.ChunkedStream;
 import lombok.AccessLevel;
@@ -29,7 +28,7 @@ public class DownloadUtil {
         }
     }
 
-    public static void uploadFile(CommandPacket commandPacket, FilePacket filePacket, File file, Channel channel) throws IOException {
+    public static void uploadFile(CommandPacket commandPacket, FilePacket filePacket, File file) throws IOException {
         String name = filePacket.getFileName();
         commandPacket.setObject(filePacket);
         ChannelFuture future = ConnectionUtil.getNewChannel();
@@ -37,6 +36,7 @@ public class DownloadUtil {
             future.channel().writeAndFlush(commandPacket);
             future.channel().writeAndFlush(new ChunkedStream(new FileInputStream(file), 2048)).addListener(ff ->
                     ConnectionUtil.closeDownloadConnection());
+                    ConnectionUtil.get().requestStructure();
             /*Indicators.downloading(name, total, (int) progress, TypeOfLoad.UPLOAD);*/
         });
     }

@@ -65,14 +65,12 @@ public class FileUtil {
 
     public static void moveFile(String fileName, String filePath, String folderPath) throws IOException {
         File file = new File(folderPath, fileName);
-        if (!file.exists()) {
-            file.createNewFile();
-        }
         Files.move(Path.of(filePath), Path.of(file.getAbsolutePath()), StandardCopyOption.REPLACE_EXISTING);
-        File file1 = new File(filePath);
-        if (file.exists()) {
-            Files.delete(Path.of(filePath));
-        }
+    }
+
+    public static void copyFile(String fileName, String filePath, String folderPath) throws IOException {
+        File file = new File(folderPath, fileName);
+        Files.copy(Path.of(filePath), Path.of(file.getAbsolutePath()), StandardCopyOption.REPLACE_EXISTING);
     }
 
     private static void saveFolderIteration(CloudFolder cloudFolder, File file) {

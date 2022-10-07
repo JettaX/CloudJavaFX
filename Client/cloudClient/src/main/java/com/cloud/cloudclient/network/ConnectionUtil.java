@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.concurrent.*;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -14,7 +15,8 @@ public class ConnectionUtil {
     private static TCPConnection connection = null;
     @Setter
     private static ChannelFuture DownloadConnection = null;
-    private static Thread downloadThread = null;
+    private static BlockingQueue<Runnable> queue = new SynchronousQueue<>();
+    private static ExecutorService executorService = new ThreadPoolExecutor(1, 2, 30, TimeUnit.SECONDS, queue);
 
     public static void addIfNotExists(TCPConnectionListener listener) throws IOException {
         if (connection == null) {
@@ -28,16 +30,9 @@ public class ConnectionUtil {
     }
 
     public static ChannelFuture getNewChannel() {
-        downloadThread = new Thread(() -> {
-            try {
-                ClientNetty.getNewChannel();
-            } catch (Exception e) {
-                log.debug("Thread interrupted");
-            }
-        });
-        downloadThread.start();
+        executorService.submit(ClientNetty::getNewChannel);
         int count = 10;
-        while (DownloadConnection == null && count-- > 0) {
+        while ((DownloadConnection == null || !DownloadConnection.channel().isActive()) && count-- > 0) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -50,9 +45,6 @@ public class ConnectionUtil {
     public static void closeDownloadConnection() {
         DownloadConnection.channel().disconnect();
         DownloadConnection.channel().close();
-        DownloadConnection = null;
-        downloadThread.interrupt();
-        downloadThread = null;
     }
 
     public static void remove() {

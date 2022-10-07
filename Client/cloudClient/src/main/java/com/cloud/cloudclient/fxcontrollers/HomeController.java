@@ -2,7 +2,9 @@ package com.cloud.cloudclient.fxcontrollers;
 
 
 import com.cloud.cloudclient.Main;
+import com.cloud.cloudclient.entity.TransferFile;
 import com.cloud.cloudclient.network.ConnectionWrapper;
+import com.cloud.cloudclient.utils.Clipboard;
 import com.cloud.cloudclient.utils.FileUtil;
 import com.cloud.cloudclient.utils.FilesChecker;
 import com.cloud.cloudclient.view.Indicators;
@@ -98,7 +100,29 @@ public class HomeController {
             foldersWrapper = new FlowPane();
         }
         foldersWrapper.getStyleClass().add("folders-wrapper");
+        setFoldersWrapperListener();
         scrollPaneHome.contentProperty().set(foldersWrapper);
+    }
+
+    private void setFoldersWrapperListener() {
+        foldersWrapper.setOnMouseClicked(event -> {
+            if (event.getButton().equals(MouseButton.SECONDARY)) {
+                createContextMenuForFoldersWrapper().show(foldersWrapper, event.getScreenX(), event.getScreenY());
+            }
+        });
+    }
+
+
+    private ContextMenu createContextMenuForFoldersWrapper() {
+        ContextMenu contextMenu = new ContextMenu();
+        contextMenu.setAutoHide(true);
+
+
+        MenuItem paste = new MenuItem("Paste");
+        pasteFileListener(paste, currentCloudFolder);
+
+        contextMenu.getItems().add(paste);
+        return contextMenu;
     }
 
     private void toggleView() {
@@ -126,6 +150,8 @@ public class HomeController {
 
     private ContextMenu createContextMenuForAccount() {
         ContextMenu contextMenu = new ContextMenu();
+        contextMenu.setAutoHide(true);
+
         MenuItem exit = new MenuItem("exit");
         exit.setOnAction(event -> Main.disconnect());
         contextMenu.getItems().add(exit);
@@ -186,6 +212,12 @@ public class HomeController {
         });
     }
 
+    public void generateHierarchyOnRequest(CloudFolder cloudFolder) {
+        if (serverSource.isSelected()) {
+            generateHierarchy(cloudFolder);
+        }
+    }
+
     public void generateHierarchy(CloudFolder cloudFolder) {
         foldersWrapper.getChildren().clear();
         currentCloudFolder = cloudFolder;
@@ -240,7 +272,7 @@ public class HomeController {
     }
 
     private void setDragOver(DragEvent event) {
-        if (event.getDragboard().hasFiles()) {
+        if (event.getDragboard().hasFiles() && !(event.getGestureSource() instanceof Button)) {
             event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
             event.consume();
         }
@@ -248,6 +280,9 @@ public class HomeController {
 
     private ContextMenu createContextMenuForFolder(CloudFolder cloudFolder) {
         ContextMenu contextMenu = new ContextMenu();
+        contextMenu.setAutoHide(true);
+
+
         MenuItem save = new MenuItem(serverSource.isSelected() ? "Save to local" : "Save to Server");
         saveFolderListener(save, cloudFolder);
 
@@ -257,10 +292,53 @@ public class HomeController {
         MenuItem rename = new MenuItem("Rename");
         renameFileListener(rename, cloudFolder.getName(), cloudFolder.getPath());
 
+        MenuItem paste = new MenuItem("Paste");
+        pasteFileListener(paste, cloudFolder);
+
         contextMenu.getItems().add(save);
         contextMenu.getItems().add(delete);
         contextMenu.getItems().add(rename);
+        contextMenu.getItems().add(paste);
         return contextMenu;
+    }
+
+    private void pasteFileListener(MenuItem paste, CloudFolder cloudFolder) {
+        paste.setOnAction(event -> {
+            if (!Clipboard.isEmpty()) {
+                TransferFile transferFile = Clipboard.getFile();
+                if (localSource.isSelected() && transferFile.isLocal()) {
+                    localTransferFile(transferFile, cloudFolder);
+                } else if (serverSource.isSelected() && !transferFile.isLocal()) {
+                    serverTransferFile(transferFile, cloudFolder);
+                }
+            }
+        });
+    }
+
+    private void serverTransferFile(TransferFile transferFile, CloudFolder cloudFolder) {
+        if (transferFile.getMode().compareTo(TransferMode.COPY) == 0) {
+            connection.copyFile(transferFile, cloudFolder.getPath());
+        } else if (transferFile.getMode().compareTo(TransferMode.MOVE) == 0) {
+            connection.moveFile(transferFile, cloudFolder.getPath());
+        }
+    }
+
+    private void localTransferFile(TransferFile transferFile, CloudFolder cloudFolder) {
+        if (transferFile.getMode().compareTo(TransferMode.COPY) == 0) {
+            try {
+                FileUtil.copyFile(transferFile.getName(), transferFile.getPath(), cloudFolder.getPath());
+                onReload();
+            } catch (IOException e) {
+                log.debug("Failed to copy transfer file: " + transferFile.getName() + " to " + cloudFolder.getPath());
+            }
+        } else if (transferFile.getMode().compareTo(TransferMode.MOVE) == 0) {
+            try {
+                FileUtil.moveFile(transferFile.getName(), transferFile.getPath(), cloudFolder.getPath());
+                onReload();
+            } catch (IOException e) {
+                log.debug("Failed to move transfer file: " + transferFile.getName() + " to " + cloudFolder.getPath());
+            }
+        }
     }
 
     private void saveFolderListener(MenuItem save, CloudFolder cloudFolder) {
@@ -322,16 +400,35 @@ public class HomeController {
 
     private ContextMenu createContextMenuForFile(CloudFile cloudFile) {
         ContextMenu contextMenu = new ContextMenu();
+        contextMenu.setAutoHide(true);
+
+
         MenuItem save = new MenuItem(serverSource.isSelected() ? "Save to local" : "Save to Server");
         saveFileListener(save, contextMenu, cloudFile);
+
         MenuItem delete = new MenuItem("Delete");
         deleteFileListener(delete, cloudFile);
+
         MenuItem rename = new MenuItem("Rename");
         renameFileListener(rename, cloudFile.getName(), cloudFile.getPath());
+
+        MenuItem copy = new MenuItem("Copy");
+        transferFileListener(copy, cloudFile, TransferMode.COPY);
+
+        MenuItem move = new MenuItem("Move");
+        transferFileListener(move, cloudFile, TransferMode.MOVE);
+
         contextMenu.getItems().add(save);
         contextMenu.getItems().add(delete);
         contextMenu.getItems().add(rename);
+        contextMenu.getItems().add(copy);
+        contextMenu.getItems().add(move);
         return contextMenu;
+    }
+
+    private void transferFileListener(MenuItem transfer, CloudFile cloudFile, TransferMode transferMode) {
+        transfer.setOnAction(event -> Clipboard.putFile(new TransferFile(cloudFile.getName(), cloudFile.getPath(),
+                transferMode, localSource.isSelected())));
     }
 
     private void renameFileListener(MenuItem rename, String name, String path) {
@@ -363,11 +460,15 @@ public class HomeController {
     private void saveFileListener(MenuItem save, ContextMenu contextMenu, CloudFile cloudFile) {
         save.setOnAction(event1 -> {
             if (serverSource.isSelected()) {
-                connection.requestFile(cloudFile.getPath());
+                if (!FilesChecker.isLocalSave(cloudFile)) {
+                    connection.requestFile(cloudFile.getPath());
+                }
             } else {
                 /*startDownloading(contextMenu);*/
-                File file = new File(cloudFile.getPath());
-                connection.sendFile(file);
+                if (!FilesChecker.isServerSave(cloudFile)) {
+                    File file = new File(cloudFile.getPath());
+                    connection.sendFile(file);
+                }
                 /*endDownloading(file.getName(), contextMenu);*/
             }
         });
@@ -405,7 +506,7 @@ public class HomeController {
     }
 
     private Button listView(String name, String iconPath, long size, boolean isCloud, boolean isLocal) {
-        return new ListViewButton(name,size,
+        return new ListViewButton(name, size,
                 createImageViewCloud(isCloud, isLocal),
                 createImageView(iconPath, 20, 20));
     }
@@ -497,6 +598,9 @@ public class HomeController {
 
     public ContextMenu createContextMenuForAddFiles() {
         ContextMenu contextMenu = new ContextMenu();
+        contextMenu.setAutoHide(true);
+
+
         MenuItem addFolder = new MenuItem("add folder");
         graphicsApply(addFolder, "/images/icon/folder-open.png", 20, 20);
         addFolder.setOnAction(event -> showDialog(createAddDialog("enter file name")));

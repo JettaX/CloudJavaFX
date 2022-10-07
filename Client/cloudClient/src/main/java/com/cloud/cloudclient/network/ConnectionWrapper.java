@@ -1,5 +1,6 @@
 package com.cloud.cloudclient.network;
 
+import com.cloud.cloudclient.entity.TransferFile;
 import com.cloud.common.entity.CloudFolder;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,8 +13,8 @@ import java.util.concurrent.*;
 public class ConnectionWrapper implements Connection {
     @Getter
     private static ConnectionWrapper INSTANCE = new ConnectionWrapper();
-    private BlockingQueue<Runnable> queue = new DelayQueue();
-    private ExecutorService executorService = new ThreadPoolExecutor(1,5,30, TimeUnit.SECONDS, queue);
+    private BlockingQueue<Runnable> queue = new SynchronousQueue<>();
+    private ExecutorService executorService = new ThreadPoolExecutor(1, 5, 30, TimeUnit.SECONDS, queue);
 
     @Override
     public void sendLogin(String login, String password) {
@@ -74,6 +75,16 @@ public class ConnectionWrapper implements Connection {
     @Override
     public void createFolder(String path) {
         executorService.submit(() -> ConnectionUtil.get().createFolder(path));
+    }
+
+    @Override
+    public void moveFile(TransferFile transferFile, String folderPath) {
+        executorService.submit(() -> ConnectionUtil.get().moveFile(transferFile, folderPath));
+    }
+
+    @Override
+    public void copyFile(TransferFile transferFile, String folderPath) {
+        executorService.submit(() -> ConnectionUtil.get().copyFile(transferFile, folderPath));
     }
 
     @Override

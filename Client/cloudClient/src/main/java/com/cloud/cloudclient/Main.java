@@ -85,7 +85,7 @@ public class Main extends Application {
 
     public static void reFillHierarchy() {
         if (activeScreen.equals(ActiveScreen.HOME)) {
-            homeController.generateHierarchy(root);
+            homeController.generateHierarchyOnRequest(root);
         }
     }
 

@@ -34,7 +34,7 @@ public class AuthToken {
         connection = ConnectionWrapper.getINSTANCE();
         userDAO = UserDaoJDBC.getINSTANCE();
         User user = userDAO.getUserByUserName(username);
-        imageWrapper.getChildren().add(RoundPicture.getRoundPicture(50, user.getImageUrl()));
+        imageWrapper.getChildren().add(RoundPicture.getRoundPicture(90, user.getImageUrl()));
     }
 
     public void auth(ActionEvent event) {

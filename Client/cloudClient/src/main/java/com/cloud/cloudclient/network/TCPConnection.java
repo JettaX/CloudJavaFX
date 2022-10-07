@@ -2,6 +2,7 @@ package com.cloud.cloudclient.network;
 
 
 import com.cloud.cloudclient.Main;
+import com.cloud.cloudclient.entity.TransferFile;
 import com.cloud.common.entity.CloudFolder;
 import com.cloud.common.entity.CommandPacket;
 import com.cloud.common.entity.FilePacket;
@@ -122,7 +123,7 @@ public class TCPConnection implements Connection {
                     .fileSize(Files.size(file.toPath()))
                     .build();
 
-            DownloadUtil.uploadFile(commandPacket, filePacket, file, channel.orElseThrow());
+            DownloadUtil.uploadFile(commandPacket, filePacket, file);
         } catch (IOException e) {
             eventListener.onException(e);
             disconnect();
@@ -145,7 +146,7 @@ public class TCPConnection implements Connection {
                     .fileSize(Files.size(file.toPath()))
                     .build();
 
-            DownloadUtil.uploadFile(commandPacket, filePacket, file, channel.orElseThrow());
+            DownloadUtil.uploadFile(commandPacket, filePacket, file);
 
         } catch (IOException e) {
             eventListener.onException(e);
@@ -198,6 +199,42 @@ public class TCPConnection implements Connection {
                 .command(ServerCommand.CREATE_FOLDER)
                 .body(path)
                 .build();
+        writeToServerWithCredentials(commandPacket);
+    }
+
+    @Override
+    public void moveFile(TransferFile transferFile, String folderPath) {
+        log.debug("Request for move file: {}", transferFile.getPath());
+        FilePacket filePacket = FilePacket.builder()
+                .filePath(transferFile.getPath())
+                .fileName(transferFile.getName())
+                .newFilePath(folderPath)
+                .build();
+
+        CommandPacket commandPacket = CommandPacket.builder()
+                .command(ServerCommand.MOVE_FILE)
+                .object(filePacket)
+                .build();
+
+        writeToServerWithCredentials(commandPacket);
+
+    }
+
+    @Override
+    public void copyFile(TransferFile transferFile, String folderPath) {
+        log.debug("Request for copy file: {}", transferFile.getPath());
+
+        FilePacket filePacket = FilePacket.builder()
+                .filePath(transferFile.getPath())
+                .fileName(transferFile.getName())
+                .newFilePath(folderPath)
+                .build();
+
+        CommandPacket commandPacket = CommandPacket.builder()
+                .command(ServerCommand.COPY_FILE)
+                .object(filePacket)
+                .build();
+
         writeToServerWithCredentials(commandPacket);
     }
 
