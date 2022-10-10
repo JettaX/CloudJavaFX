@@ -1,4 +1,4 @@
-package com.cloud.cloudclient.view;
+package com.cloud.cloudclient.view.enums;
 
 public enum TypeOfLoad {
     DOWNLOAD("download-bar"),

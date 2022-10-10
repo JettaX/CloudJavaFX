@@ -1,7 +1,7 @@
 package com.cloud.cloudclient.view;
 
 
-import com.cloud.cloudclient.view.utils.BackUrl;
+import com.cloud.cloudclient.view.enums.BackUrl;
 import javafx.scene.control.Button;
 
 

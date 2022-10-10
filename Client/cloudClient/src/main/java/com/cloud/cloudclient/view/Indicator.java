@@ -1,5 +1,6 @@
 package com.cloud.cloudclient.view;
 
+import com.cloud.cloudclient.view.enums.TypeOfLoad;
 import javafx.scene.control.ProgressBar;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

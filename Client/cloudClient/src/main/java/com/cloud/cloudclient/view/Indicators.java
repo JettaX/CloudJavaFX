@@ -1,5 +1,6 @@
 package com.cloud.cloudclient.view;
 
+import com.cloud.cloudclient.view.enums.TypeOfLoad;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;

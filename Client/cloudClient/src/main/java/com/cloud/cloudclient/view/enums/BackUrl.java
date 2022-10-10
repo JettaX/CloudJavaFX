@@ -1,4 +1,4 @@
-package com.cloud.cloudclient.view.utils;
+package com.cloud.cloudclient.view.enums;
 
 public enum BackUrl {
     SIGN_IN,

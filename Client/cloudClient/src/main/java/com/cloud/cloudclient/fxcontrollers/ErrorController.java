@@ -2,7 +2,7 @@ package com.cloud.cloudclient.fxcontrollers;
 
 
 import com.cloud.cloudclient.Main;
-import com.cloud.cloudclient.view.utils.BackUrl;
+import com.cloud.cloudclient.view.enums.BackUrl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

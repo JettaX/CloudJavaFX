@@ -7,7 +7,7 @@ import com.cloud.cloudclient.dao.UserDaoJDBC;
 import com.cloud.cloudclient.utils.FilesChecker;
 import com.cloud.cloudclient.utils.FileUtil;
 import com.cloud.cloudclient.utils.PropertiesUtil;
-import com.cloud.cloudclient.view.utils.BackUrl;
+import com.cloud.cloudclient.view.enums.BackUrl;
 import com.cloud.common.entity.CloudFolder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.buffer.ByteBuf;

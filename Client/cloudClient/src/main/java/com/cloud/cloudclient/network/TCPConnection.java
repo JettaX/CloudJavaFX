@@ -207,7 +207,6 @@ public class TCPConnection implements Connection {
         log.debug("Request for move file: {}", transferFile.getPath());
         FilePacket filePacket = FilePacket.builder()
                 .filePath(transferFile.getPath())
-                .fileName(transferFile.getName())
                 .newFilePath(folderPath)
                 .build();
 
@@ -226,7 +225,6 @@ public class TCPConnection implements Connection {
 
         FilePacket filePacket = FilePacket.builder()
                 .filePath(transferFile.getPath())
-                .fileName(transferFile.getName())
                 .newFilePath(folderPath)
                 .build();
 

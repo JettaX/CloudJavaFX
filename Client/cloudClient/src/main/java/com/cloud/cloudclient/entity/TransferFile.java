@@ -13,4 +13,5 @@ public class TransferFile {
     String path;
     TransferMode mode;
     boolean isLocal;
+    boolean isDirectory;
 }

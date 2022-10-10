@@ -5,8 +5,8 @@ import com.cloud.cloudclient.entity.User;
 import com.cloud.cloudclient.fxcontrollers.ErrorController;
 import com.cloud.cloudclient.fxcontrollers.HomeController;
 import com.cloud.cloudclient.network.TCPListener;
-import com.cloud.cloudclient.view.ActiveScreen;
-import com.cloud.cloudclient.view.utils.BackUrl;
+import com.cloud.cloudclient.view.enums.ActiveScreen;
+import com.cloud.cloudclient.view.enums.BackUrl;
 import com.cloud.common.entity.CloudFolder;
 import javafx.application.Application;
 import javafx.application.HostServices;
@@ -25,10 +25,8 @@ public class Main extends Application {
     public static CloudFolder root;
     public static String token;
     private static Stage stage;
-    public static boolean isFirst = true;
     private static HomeController homeController;
     private static ActiveScreen activeScreen;
-    public static boolean isServerConnected = false;
 
     @Getter
     private HostServices hostService = getHostServices();
@@ -114,7 +112,6 @@ public class Main extends Application {
 
     public static void disconnect() {
         TCPListener.createNewInstance();
-        isServerConnected = false;
         user = null;
         token = null;
         root = null;

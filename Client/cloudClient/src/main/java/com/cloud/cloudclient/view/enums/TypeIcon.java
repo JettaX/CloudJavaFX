@@ -1,4 +1,4 @@
-package com.cloud.cloudclient.view.utils;
+package com.cloud.cloudclient.view.enums;
 
 public enum TypeIcon {
     TEXT("file-text2.png"),

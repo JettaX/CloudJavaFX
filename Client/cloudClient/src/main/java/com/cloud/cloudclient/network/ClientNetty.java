@@ -42,10 +42,7 @@ public class ClientNetty {
                 });
         try {
             ChannelFuture f = bootstrap.connect().syncUninterruptibly();
-            f.addListener(future -> {
-                Main.isServerConnected = true;
-                connection.setChannel(Optional.of(f.channel()));
-            });
+            f.addListener(future -> connection.setChannel(Optional.of(f.channel())));
             f.channel().closeFuture().syncUninterruptibly();
         } finally {
             try {

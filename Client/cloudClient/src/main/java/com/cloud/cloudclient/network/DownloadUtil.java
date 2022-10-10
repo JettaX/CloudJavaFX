@@ -2,7 +2,7 @@ package com.cloud.cloudclient.network;
 
 
 import com.cloud.cloudclient.view.Indicators;
-import com.cloud.cloudclient.view.TypeOfLoad;
+import com.cloud.cloudclient.view.enums.TypeOfLoad;
 import com.cloud.common.entity.CommandPacket;
 import com.cloud.common.entity.FilePacket;
 import io.netty.buffer.ByteBuf;

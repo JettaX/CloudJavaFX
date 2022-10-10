@@ -28,4 +28,6 @@ module com.cloud.cloudclient {
     exports com.cloud.common.entity;
     exports com.cloud.cloudclient.utils;
     opens com.cloud.cloudclient.utils to javafx.fxml;
+    exports com.cloud.cloudclient.view.enums;
+    opens com.cloud.cloudclient.view.enums to javafx.fxml;
 }

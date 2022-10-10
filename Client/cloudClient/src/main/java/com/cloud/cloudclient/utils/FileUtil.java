@@ -2,9 +2,9 @@ package com.cloud.cloudclient.utils;
 
 
 import com.cloud.cloudclient.Main;
+import com.cloud.cloudclient.network.ConnectionUtil;
 import com.cloud.common.entity.CloudFile;
 import com.cloud.common.entity.CloudFolder;
-import com.cloud.cloudclient.network.ConnectionUtil;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.Objects;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -63,14 +64,69 @@ public class FileUtil {
         file.renameTo(new File(newPath, newName));
     }
 
-    public static void moveFile(String fileName, String filePath, String folderPath) throws IOException {
-        File file = new File(folderPath, fileName);
-        Files.move(Path.of(filePath), Path.of(file.getAbsolutePath()), StandardCopyOption.REPLACE_EXISTING);
+    public static void copy(String fromPath, String toPath) throws IOException {
+        File fileSource = new File(fromPath);
+        File fileTarget = new File(toPath, fileSource.getName());
+        if (fileSource.isDirectory()) {
+            if (!fileTarget.exists()) {
+                fileTarget.mkdirs();
+            }
+            copyFolder(fileSource, fileTarget);
+        } else {
+            copyFile(fileSource.getName(), fromPath, toPath);
+        }
     }
 
-    public static void copyFile(String fileName, String filePath, String folderPath) throws IOException {
-        File file = new File(folderPath, fileName);
-        Files.copy(Path.of(filePath), Path.of(file.getAbsolutePath()), StandardCopyOption.REPLACE_EXISTING);
+    private static void copyFile(String fileName, String fromPath, String toPath) throws IOException {
+        File file = new File(toPath, fileName);
+        Files.copy(Path.of(fromPath), Path.of(file.getAbsolutePath()), StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    private static void copyFolder(File fromPath, File toPath) throws IOException {
+        File[] list = fromPath.listFiles();
+        for (int i = 0; i < Objects.requireNonNull(list).length; i++) {
+            File source = list[i];
+            if (source.isDirectory()) {
+                File targetFolder = new File(toPath, source.getName());
+                targetFolder.mkdir();
+                copyFolder(source, targetFolder);
+            } else {
+                copyFile(source.getName(), source.getPath(), toPath.getPath());
+            }
+        }
+    }
+
+    public static void move(String fromPath, String toPath) throws IOException {
+        File fileSource = new File(fromPath);
+        File fileTarget = new File(toPath, fileSource.getName());
+        if (fileSource.isDirectory()) {
+            if (!fileTarget.exists()) {
+                fileTarget.mkdirs();
+            }
+            moveFolder(fileSource, fileTarget);
+            deleteFolder(fileSource.getPath());
+        } else {
+            moveFile(fileSource.getName(), fromPath, toPath);
+        }
+    }
+
+    private static void moveFile(String fileName, String fromPath, String toPath) throws IOException {
+        File file = new File(toPath, fileName);
+        Files.move(Path.of(fromPath), Path.of(file.getAbsolutePath()), StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    private static void moveFolder(File fromPath, File toPath) throws IOException {
+        File[] list = fromPath.listFiles();
+        for (int i = 0; i < Objects.requireNonNull(list).length; i++) {
+            File source = list[i];
+            if (source.isDirectory()) {
+                File targetFolder = new File(toPath, source.getName());
+                targetFolder.mkdir();
+                moveFolder(source, targetFolder);
+            } else {
+                moveFile(source.getName(), source.getPath(), toPath.getPath());
+            }
+        }
     }
 
     private static void saveFolderIteration(CloudFolder cloudFolder, File file) {

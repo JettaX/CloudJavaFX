@@ -3,13 +3,15 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox onMouseClicked="#backListener" spacing="10" styleClass="root" stylesheets="@styles/common.css, @styles/home.css"
+<HBox onMouseClicked="#backListener" spacing="10" styleClass="root"
+      stylesheets="@styles/common.css, @styles/home.css, @styles/dashboard.css"
       xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.cloud.cloudclient.fxcontrollers.HomeController">
 
 	<VBox fx:id="tabsWrapper" spacing="10">
 		<ToggleButton fx:id="serverSource" alignment="CENTER_LEFT" selected="true" styleClass="home-toggle"/>
 		<ToggleButton fx:id="localSource" alignment="CENTER_LEFT" styleClass="home-toggle"/>
+		<ToggleButton fx:id="dashboard" alignment="CENTER_LEFT" styleClass="home-toggle"/>
 	</VBox>
 
 	<VBox fx:id="homeWrapper" HBox.hgrow="ALWAYS">

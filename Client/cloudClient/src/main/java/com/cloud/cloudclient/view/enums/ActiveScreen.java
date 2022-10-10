@@ -1,4 +1,4 @@
-package com.cloud.cloudclient.view;
+package com.cloud.cloudclient.view.enums;
 
 public enum ActiveScreen {
     LOGIN,
@@ -7,5 +7,6 @@ public enum ActiveScreen {
     SETTINGS,
     ERROR,
     SIGNUP,
-    TOKEN_AUTH
+    TOKEN_AUTH,
+    DASHBOARD
 }
